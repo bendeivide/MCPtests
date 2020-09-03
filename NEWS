@@ -1,0 +1,8 @@
+Version 1.0
+-----------
+- In the first version, we created the basic functions of the MCP package:
+  * MCPtest()
+  * MCPwrite()
+  * plot.MCP()
+  * guiMCP()
+- We added parallelization for some tests

@@ -1,0 +1,424 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: midrangeMCP 2.1\n"
+"Report-Msgid-Bugs-To: ben.deivide@ufsj.edu.br\n"
+"POT-Creation-Date: 2020-04-13 14:03\n"
+"PO-Revision-Date: 2020-04-13 \n"
+"Last-Translator: Ben Deivide de Oliveira Batista\n"
+"Language-Team: Brazilian Portuguese\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#####
+# GUI
+#####
+
+msgid "GUI to the MCP package"
+msgstr "IGU para o pacote MCP"
+
+msgid "Configurations of the data"
+msgstr "Configurações dos dados"
+
+msgid "Enter the data"
+msgstr "Insira os dados"
+
+msgid "The variables in the file:"
+msgstr "As variáveis no arquivo:"
+
+msgid "R object created: 'dat'"
+msgstr "Objeto R criado: 'dat'"
+
+msgid "Enter the data file (.txt or .csv)"
+msgstr "Entre com o conjunto de dados (.txt ou .csv)"
+
+msgid "Select a file ..."
+msgstr "Selecione um arquivo ..."
+
+msgid "Check the data has been loaded correctly. To do this, use the 'Edit/View' button or the 'Output' frame."
+msgstr "Verifique se os dados foram carregados corretamente. Para isso, use o botão 'Edite/Visualize' ou o quadro 'Saída'."
+
+msgid "No data set has been entered!"
+msgstr "Nenhum conjunto de dados foi inserido!"
+
+msgid "File"
+msgstr "Arquivo"
+
+msgid "Open file (.txt or .csv)..."
+msgstr "Abra o arquivo (.txt or .csv)..."
+
+msgid "Comma as decimal points"
+msgstr "Vírgula como separador decimal"
+
+msgid "Separator of variables:"
+msgstr "Separador de variáveis:"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Data set..."
+msgstr "Conjunto de dados..."
+
+msgid "Choose directory..."
+msgstr "Escolha o diretório..."
+
+msgid "To insert a data set, the possible extensions are '.txt' and '.csv'. To do this, use the 'browse' button. If you want to identify a directory, before clicking on the 'browse' button, click on the 'Choosing the directory' button. After entering the data set, if you want to edit or view, click on the 'Edit/View' button. If your data has a comma as a decimal point separator, before clicking on the 'browse' button, activate the 'Comma as decimal points' box. Finally, if the variable separator is different from a blank space, indicate it without quotes in the 'Separator of variables' box."
+msgstr "Para inserir um conjunto de dados, as extensões possíveis são '.txt' e '.csv'. Para isso, use o botão 'browse'. Se quiser identificar um diretório, antes de clicar no botão 'browse', clique no botão 'Escolha um diretório'. Depois de entrar com o conjunto de dados, se quiser editar ou visualizar, clique no botão 'Edite/Visualize'. Se seus dados apresentam vírgula como separador decimal, antes de clicar no botão 'browse', ative a caixa 'Vírgula como separador decimal'. Finalmente, se o separador de variáveis é diferente de um espaço em branco, indique-o na caixa 'Separador de variáveis'."
+
+msgid "Output:"
+msgstr "Saída"
+
+msgid "Console:"
+msgstr "Console"
+
+msgid "Calculate"
+msgstr "Calcular"
+
+msgid "Input"
+msgstr "Entrada"
+
+msgid "Tests:"
+msgstr "Testes:"
+
+msgid "Choose the test for data analysis. The Mean Grouping test based on Midrange (MGM test) and Mean Grouping test based on Range (MGR test) are tests without ambiguity in their results. These tests are similar to the Scott-Knott test. The Tukey Midrange test (TM test) and SNK Midrange test (SNKM test) are tests similar to the Tukey and SNK tests, respectively. these tests are also based on midrange."
+msgstr "Escolha o teste para a análise de dados. O teste de agrumento de médias baseado na Midrange (teste MGM) e o teste de agrupamento de médias baseados na amplitude (teste MGR). Os testes Tukey Midrange (teste TM) e o teste SNK Midrange (teste SNKM) são similares aos testes Tukey e SNK, respectivamente. Esses testes também são baseados na midrange."
+
+msgid "Extension:"
+msgstr "Extensão:"
+
+msgid "Choose the type of extension for the data output file. If 'latex', the code will be exported to the Console frame. The remaining options will be exported to the selected directory. The choice of the directory can be made in the 'Choosing the directory' button."
+msgstr "Escolha o tipo de extensão para a saída dos resultados. Se 'latex', o código será exportado no quadro 'Console'. As opções restantes serão exportadas ao diretório selecionado. A escolha do diretório pode ser feita pelo botão 'Escolha o diretório'."
+
+# Line 263:
+#msgid "Options:"
+#msgstr "Opções:"
+
+msgid "help"
+msgstr "Ajuda"
+
+msgid "Choose the type of data entry. If 'Model', enter the experimental model. If 'Response Variable', enter the object name of the responses and treatments variables and if 'Averages', enter the vector of means and treatments. For more details, use the help button on each option. \n The 'Averages' option is the only one that will not need to load a data set. Just enter the recommended options and then click the 'Calculate' button."
+msgstr "Escolha um tipo de entrada de dados. Se 'Model', entre com o modelo experimental. Se 'Response Variable', entre com o nome do objeto das variáveis respostas e dos tratamentos. E se 'Averages', entre com o vetor de médias e de tratamentos. Para mais detalhes, use o botão 'Ajuda' em cada opção. \n A opção 'Médias' é a única opção que não é necessário carregar o conjunto de dados. Apenas entre com as opções recomendadas e clique no botão 'Calcular'."
+
+msgid "Significance:"
+msgstr "Significância:"
+
+msgid "Enter the value of the significance level. This value is a number between 0 and 1."
+msgstr "Entre com os valores do nível de significância. Esse valor é um número entre 0 e 1."
+
+msgid "Model"
+msgstr "Modelo"
+
+msgid "Scale of Plot"
+msgstr "Escala do Gráfico"
+
+msgid "Enter model:"
+msgstr "Entre com o modelo:"
+
+msgid "Enter the experimental model of type Response Variable (RV) ~ Predictive Variables (PV). These variables are in the 'Output' frame, after entering the data set. For example, in a randomized block design, assuming the 'treat' object corresponding to the treatments, 'block' object corresponding to the blocks and 'resp' object corresponding to the variable response. So, you must enter the following expression: resp ~ trat + block."
+msgstr "Entre com o modelo experimental do tipo Variável Resposta (VR) ~ Variáveis Preditivas (VP). Essas variáveis estão no quadro 'Saída', depois de entrar com o conjunto de dados. Por exemplo, em um delineamento em blocos casualizados, assumindo o objeto 'treat' correspondendo aos tratamentos, o objeto 'block' aos blocos e o objeto 'resp' correspondendo as variáveis respostas, podemos entrar com a seguinte expressão: resp ~ trat + block."
+
+msgid "Treatment:"
+msgstr "Tratamento:"
+
+msgid "Enter label name..."
+msgstr "Entre com o nome do rótulo..."
+
+msgid "Enter the name of the treatments in the experiment model inserted above, in Predictive Variables (PV). The name of the treatment are in the 'Output' frame, after entering the data set. Inserted all the arguments above, click on the 'Calculate' button."
+msgstr "Entre com o nome dos tratamentos no modelo experimental inserido acima, em variáveis preditivas. O nome do tratamento está no quadro 'Saída', depois de inserido o conjunto de dados. Inserido todos os argumentos acim, clique no botão 'Calcular'."
+
+msgid "Response variable"
+msgstr "Variável resposta"
+
+msgid "Response:"
+msgstr "Resposta:"
+
+msgid "Insert the name of the variable response of the experiment model. The name of the response variable are in the 'Output' frame, after inserting the data set."
+msgstr "Insira o nome da variáve resposta no modelo experimental. O nome da variável resposta está no quadro 'Saída', depois de inserido o conjunto de dados."
+
+msgid "Enter the name of the treatment of the experiment model. The name of the response variable are in the 'Output' frame, after entering the data set."
+msgstr "Entre com o nome do tratamento do modelo experimental. O nome da variável resposta está no quadro 'Saída', depois de inserido o conjunto de dados."
+
+msgid "DFerror:"
+msgstr "GLE"
+
+msgid "Enter numeric value..."
+msgstr "Entre com o valor numérico..."
+
+msgid "Enter the numeric value of the degrees of freedom of the mean square error of the experiment model."
+msgstr "Entre com o valor numérico dos dos graus de liberdade do quadrado médio do erro. "
+
+msgid "MSerror:"
+msgstr "QME"
+
+msgid "Enter the value of the mean square error of the experiment model. The value is numeric. Inserted all the arguments above, click on the 'Calculate' button."
+msgstr "Entre com o valor do quadrado médio do erro do modelo experimental. O valor é numérico. Inserido todos os argumentos acim, clique no botão 'Calcular'."
+
+msgid "Averages"
+msgstr "Médias"
+
+msgid "Averages:"
+msgstr "Médias:"
+
+msgid "Enter the vector..."
+msgstr "Entre com o vetor..."
+
+msgid "Enter the values of the averages. Each mean of the vector must be separated by a comma. For example, for the vector of the average of four treatments: 10, 20, 30, 40. You do not need to use the concatenate function, i.e., c()."
+msgstr "Entre com os valores das médias. Cada média do vetor de ve ser separado por uma vírgula. Por exemplo, para um vetor de médias de quatro tratamentos: 10, 20, 30, 40. Você não necessita usar a função concatenar do R, isto é, c()."
+
+msgid "Enter the treatment levels. For example, for a character vector of four treatments: A, B, C, D. You do not need to use the concatenate function, i.e., c(). Nor will you need to use quotes between treatment levels."
+msgstr "Entre com os niveis dos tratamentos. Por exemplo, para um vetor de caractere de quatro tratamentos: A, B, C, D. Você não necessita usar a função concatenar, isto é, c(). Nor will you need to use quotes between treatment levels."
+
+msgid "Enter the numeric value..."
+msgstr "Entre com o valor numérico..."
+
+msgid "Enter the value of the degrees of freedom of the mean square error of the experiment model. The value is numeric."
+msgstr "Entre com o valor dos graus de liberdade do quadrado médio do erro do modelo experimental. O valor é numérico."
+
+msgid "Enter the value of the mean square error of the experiment model. The value is numeric."
+msgstr "Entre com o valor do quadrado médio do erro. O valor é numérico."
+
+msgid "Replication:"
+msgstr "Repetição:"
+
+msgid "Enter the value of number of replications of the treatments. The value is numeric and if the data is unbalanced use the harmonic mean of the replications. Inserted all the arguments above, click on the 'Calculate' button"
+msgstr "Entre com o valor do número de repetições dos tratamentos. O valor é numérico e se os dados forem desbalanceados, use a média harmônica das repetições."
+
+msgid "Graphic Parameters"
+msgstr "Parâmetros Gráficos"
+
+msgid "Plot"
+msgstr "Gráfico"
+
+msgid "Color:"
+msgstr "Cor:"
+
+msgid "or gray.colors() or..."
+msgstr "ou gray.colors() ou..."
+
+msgid "Enter the color name of the chart bars. Place quotation marks around the color names. For example, if you want the color red for the bars, use 'red'. For functions, quotation marks are not necessary, for example gray.colors() function."
+msgstr "Entre com o nome da cor do gráfico de barras. Insira aspas em torno do nome da cor. Por exemplo, se escolher a cor vermelha use 'red'. Para funções, não será necessário aspas, como por exemplo a função gray.colors()."
+
+msgid "Horizontal:"
+msgstr "Horizontal:"
+
+msgid "FALSE or TRUE..."
+msgstr "FALSE ou TRUE..."
+
+msgid "Choose horizontal or vertical bars (FALSE or TRUE)."
+msgstr "Se horizontal, use FALSE. Se vertical use TRUE."
+
+msgid "Axes:"
+msgstr "Eixos:"
+
+msgid "Enter the axes. Separate them by semicolons. To add the names on the X and Y axes: xlab = 'Label X-axix'; ylab = 'Label Y-axis'."
+msgstr "Entre com os eixos. Separe-os por ponto e vírgula (;). Para adicionar os nomes dos eixos X e E: xlab = 'Eixo X'; ylab = 'Eixo Y'."
+
+msgid "Update plot"
+msgstr "Atualizar o gráfico"
+
+msgid "Save as..."
+msgstr "Salvar como..."
+
+msgid "Really close?"
+msgstr "Deseja fechar?"
+
+msgid "Use the MRtest function! For help, use ?MRtest."
+msgstr "Use a função MRtest! Para ajuda, use ?MRtest."
+
+msgid "Democratizing statistical knowledge to the world!"
+msgstr "Democratizando o conhecimento estatístico para o mundo!"
+
+msgid "Parallel"
+msgstr "Paralelo"
+
+msgid "Parallelization is still limited for some tests, such as the Scott-Knott's test. However, it is worth mentioning that it is not always efficient to use parallelization, especially when the data set is small."
+msgstr "A paralelização ainda está limitada para alguns testes, tais como o teste Scott-Knott. Contudo, vale ressaltar que nem sempre é eficiente utilizar a paralelização, principalmente quando o conjunto de dados é pequeno."
+
+################################
+# Internal functions without GUI
+################################
+
+msgid "The choice of the tests in the MCP argument must be in accordance with the tests chosen in the x argument \n Options:"
+msgstr "A escolha dos testes no argumento MCP deve está de acordo com os testes escolhidos no argumento x \n Opções:"
+
+msgid "The replication argument must be informed"
+msgstr "O argumento replication deve ser informado"
+
+msgid "The y argument must be numeric"
+msgstr "O argumento y deve ser numérico"
+
+msgid "The trt argument must be factor"
+msgstr "O argumento trt deve ser fator"
+
+msgid "The y and trt arguments must have same length"
+msgstr "Os argumentos y e trt devem ter mesmo comprimento"
+
+msgid "The dferror argument must be informed"
+msgstr "O argumento dferror deve ser informado"
+
+msgid "The mserror argument must be informed"
+msgstr "O argumento mserror deve ser informado"
+
+msgid "The trt argument is required"
+msgstr "O argumento trt é necessário"
+
+msgid "The options for the MCP argument are 'MGM', 'MGR', 'SNKM', 'TM' and 'SK'"
+msgstr "As opções para o argumento MCP são 'MGM', 'MGR', 'SNKM', 'TM' e 'SK'"
+
+msgid "The length of the trt argument is invalid"
+msgstr "O comprimento do argumento trt é inválido"
+
+msgid "The options for the trt argument are\n Options:"
+msgstr "As opções para o argumento trt são \n Opções:"
+
+msgid "Note: Observe which of the options have signified practice"
+msgstr "Nota: Observe quais das opções têm significado prático"
+
+msgid "Any of the options of trt argument is wrong \n Options:"
+msgstr "Alguma das opções do argumento trt está errado \n Opções:"
+
+msgid "The length of the extension argument is greater than 1."
+msgstr "O comprimento do argumento extension é maior que 1."
+
+msgid "Options:"
+msgstr "Opções:"
+
+msgid "csv"
+msgstr "csv"
+
+msgid "txt"
+msgstr "txt"
+
+msgid "xlsx"
+msgstr "xlsx"
+
+msgid "latex"
+msgstr "latex"
+
+msgid "Any dataMR argument is invalid \n Options:"
+msgstr "Algum das opções do argumento dataMR é inválido \n Opções:"
+
+msgid "groups"
+msgstr "grupos"
+
+msgid "summary"
+msgstr "Sumário"
+
+msgid "Any extension argument is invalid \n Options:"
+msgstr "Alguma das opções do argumento extension é inválido \n Opções:"
+
+msgid "Multiple Comparison Procedures"
+msgstr "Procedimentos de Comparações Múltiplas"
+
+msgid "Study:"
+msgstr "Estudo:"
+
+msgid "Unbalanced data: It will be used the harmonic mean of \n the number of experiment replicates"
+msgstr "Dados desbalanceados: Será usado a média harmônica do \n número de repetições do experimento"
+
+msgid "Summary:"
+msgstr "Sumário:"
+
+msgid "Harmonic mean of the number of experiment replicates"
+msgstr "Média harmônica do número de repetições do experimento"
+
+msgid "Statistics:"
+msgstr "Estatísticas:"
+
+msgid "Groups:"
+msgstr "Grupos:"
+
+msgid "Means Grouping Midrange Test (BATISTA, 2016)"
+msgstr "Teste de Agrupamento de Médias baseado na Midrange estudentizada (BATISTA, 2016)"
+
+msgid "Mean Grouping Range Test (BATISTA, 2016)"
+msgstr "Teste de Agrupamento de Médias baseado na amplitude estudentizada (BATISTA, 2016)"
+
+msgid "SNK Midrange Test (BATISTA, 2016)"
+msgstr "Teste SNK baseado na Midrange estudentizada (BATISTA, 2016)"
+
+msgid "Tukey Midrange Test (BATISTA, 2016)"
+msgstr "Teste Tukey baseado na Midrange estudentizada (BATISTA, 2016)"
+
+msgid "Scott-Knott's Test (SCOTT-KNOTT, 1974)"
+msgstr "Teste de Scott-Knott (SCOTT-KNOTT, 1974)"
+
+msgid "Table in latex of results of the MGM test"
+msgstr "Tabela em latex dos resultados do teste MGM"
+
+msgid "Table in latex of results of the MGR test"
+msgstr "Tabela em latex dos resultados do teste MGR"
+
+msgid "Table in latex of results of the SNKM test"
+msgstr "Tabela em latex dos resultados do teste SNKM"
+
+msgid "Table in latex of results of the TM test"
+msgstr "Tabela em latex dos resultados do teste TM"
+
+msgid "Table in latex of results of descriptive statistics"
+msgstr "Tabela em latex dos resultados das estatísticas descritivas"
+
+msgid "See yours tables in Console"
+msgstr "Veja suas tabelas no Console"
+
+msgid "Format:"
+msgstr "Formato:"
+
+msgid "See your files in Directory"
+msgstr "Veja seus arquivos no Diretório"
+
+msgid "Missing data entry!"
+msgstr "Falta entrada de dados!"
+
+msgid "Groups"
+msgstr "Grupos"
+
+msgid "Variance"
+msgstr "Variância"
+
+msgid "DF"
+msgstr "GL"
+
+msgid "Test"
+msgstr "Teste"
+
+msgid "P-value"
+msgstr "Valor-p"
+
+msgid "Means"
+msgstr "Médias"
+
+msgid "std"
+msgstr "Erro Padrão"
+
+msgid "Exp.Mean"
+msgstr "Média.Exp"
+
+msgid "MSerror"
+msgstr "QME"
+
+msgid "Stud.Midrange"
+msgstr "Midrange.Est"
+
+msgid "Ext.DMS"
+msgstr "DMS.Ext"
+
+msgid "Int.DMS"
+msgstr "DMS.Int"
+
+msgid "Details of results"
+msgstr "Detalhes dos resultados"
+
+msgid "Simple results"
+msgstr "Resultado simples"
+
+msgid "Stud.Range"
+msgstr "Amp.Est"
+
+msgid "The options for the parallel argument are TRUE or FALSE!"
+msgstr "As opções para o argumento parallel são TRUE ou FALSE!"
+
+msgid "Table in latex of results of the Scott-Knott's test"
+msgstr "Tabelas em latex dos resultados do teste Scott-Knott"
