@@ -1,4 +1,4 @@
-#' Graphical User Interface for topwinMCP function
+#' Graphical User Interface for MCPtests package
 #'
 #' \code{guiMCP} A Graphical User Interface (GUI) for
 #'     the MCP package

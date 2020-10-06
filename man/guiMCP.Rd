@@ -2,7 +2,7 @@
 % Please edit documentation in R/guiMCP.R
 \name{guiMCP}
 \alias{guiMCP}
-\title{Graphical User Interface for topwinMCP function}
+\title{Graphical User Interface for MCPtests package}
 \usage{
 guiMCP(gui = TRUE)
 }

@@ -26,9 +26,9 @@
 #' @param parallel Logic. If \code{FALSE} (default), the \code{MCPtest} function
 #' runs without parallelization. Otherwise, the code is executed with
 #' parallelization. Note that the parallelization is not always more efficient.
-#' @param console Logic. If \code{TRUE} (default), the \code{MCPtest} function
-#' runs without parallelization. prints the results on the console even
-#' though the results are stored in an object. If \code{FALSE}, otherside.
+#  @param console Logic. If \code{TRUE} (default), the \code{MCPtest} function
+#  prints the results on the console even though the results are stored in an
+#  object. If \code{FALSE}, otherside.
 #' @return \code{MCPtest} returns the print of a list of results. First,
 #'     the summary of \code{y}. Second, the statistics
 #'     of the test chosen. And finally, the  mean group results for each test.
@@ -170,7 +170,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
   }
   #####################################################
   #Defensive programming
-  if(is.null(trt)){
+  if (is.null(trt)) {
     stop("The trt argument is required", call. = FALSE)
   }
   mcps <- c("MGM", "MGR", "SNKM", "TM", "SK") # FAZER ALTERACOES
@@ -212,7 +212,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
     ntrt  <- length(names(A))
     if (any(is.na(ipch))) {
       optrt <- names(A)[2]
-      for(i in 3:ntrt) {
+      for (i in 3:ntrt) {
         optrt <- paste(optrt, names(A)[i], sep = " ")
       }
       stop("Any of the options of trt argument is wrong \n Options: ", optrt, call. = FALSE)
@@ -228,8 +228,8 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
     }
     name.y <- names(A)[1]
   }
-  if (console) cat(gettext("Multiple Comparison Procedures\n", domain = "R-MCP"))
-  if (console) cat(gettext("Study: ", domain = "R-MCP"), main, "\n\n")
+  #if (console) cat(gettext("Multiple Comparison Procedures\n", domain = "R-MCP"))
+  #if (console) cat(gettext("Study: ", domain = "R-MCP"), main, "\n\n")
 
   # Mean standard error
   ep <- function(x){
@@ -262,38 +262,38 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
   ################################################
   #Observation for unbalanced data
   if (length(unique(rn)) != 1) {
-    if (console) cat(gettext("Unbalanced data: It will be used the harmonic mean of \n the number of experiment replicates \n", domain = "R-MCP"))
+    #if (console) cat(gettext("Unbalanced data: It will be used the harmonic mean of \n the number of experiment replicates \n", domain = "R-MCP"))
   }
   ################################################
 
   if (ismean == TRUE) {
     summarydata <- data.frame(Means  = means,
                               r      = rh)
-    if (console) cat(gettext("Summary:\n", domain = "R-MCP"))
+    #if (console) cat(gettext("Summary:\n", domain = "R-MCP"))
     colnames(summarydata) <- c(gettext("Means", domain = "R-MCP"),
                                "r"
     )
-    if (console) print(summarydata)
+    #if (console) cat(summarydata)
   } else {
     summarydata <- data.frame(Means  = means,
                               std    = std,
                               r      = rh,
                               Min    = mi,
                               Max    = ma)
-    if(console) cat(gettext("Summary:\n", domain = "R-MCP"))
+    #if (console) cat(gettext("Summary:\n", domain = "R-MCP"))
     colnames(summarydata) <- c(gettext("Means", domain = "R-MCP"),
                                gettext("std", domain = "R-MCP"),
                                "r", "Min", "Max"
                                )
-    if(console) print(summarydata)
+    #if (console) print(summarydata)
   }
 
   if (length(unique(rn)) != 1) {
-    if(console) cat(gettext("\n Harmonic mean of the number of experiment replicates",
-                domain = "R-MCP"), rh, "\n")
+    #if (console) cat(gettext("\n Harmonic mean of the number of experiment replicates",
+    #            domain = "R-MCP"), rh, "\n")
   }
   #DMS midrange
-  if(any(MCP == "SNKM")) {
+  if (any(MCP == "SNKM")) {
     nnn      <- 2:n
     aaa      <- rep(1 - alpha / 2, times = (n - 1))
     MRq.snkm <- SMR::qSMR(aaa, nnn, dferror) # Studentized midrange of the SNKM test
@@ -336,7 +336,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
 
   # Means Grouping Midrange Test (BATISTA, 2016)
   if (any(MCP == "MGM")){
-    if (console) cat(gettext("\nMeans Grouping Midrange Test (BATISTA, 2016)\n\n", domain = "R-MCP"))
+    #if (console) cat(gettext("\nMeans Grouping Midrange Test (BATISTA, 2016)\n\n", domain = "R-MCP"))
     statistics <- data.frame(Exp.Mean = Mean,
                              CV      = CV,
                              MSerror = mserror,
@@ -345,7 +345,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
                              Stud.Midrange = MRq,
                              Ext.DMS = dms[1],
                              Int.DMS = dms[2])
-    if(console) cat(gettext("Statistics: \n", domain = "R-MCP"))
+    #if(console) cat(gettext("Statistics: \n", domain = "R-MCP"))
     rownames(statistics) <- " "
     colnames(statistics) <- c(gettext("Exp.Mean", domain = "R-MCP"),
                                 "CV",
@@ -357,17 +357,17 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
                                 gettext("Int.DMS", domain = "R-MCP")
                                 )
     statistics.MGM <- statistics
-    if (console) print(statistics)
+    #if (console) print(statistics)
     test <- MGMtest(y, trt, n, dferror, mserror, alpha, dms)
     test[1] <- round(test[1], 2)
     test.MGM <- test
-    if(console) cat(gettext("\nGroups: \n", domain = "R-MCP"))
-    if (console) print(test)
+    #if(console) cat(gettext("\nGroups: \n", domain = "R-MCP"))
+    #if (console) print(test)
   }
 
   # Means Grouping based on the Range Test (BATISTA, 2016)
   if (any(MCP == "MGR")){
-    if (console) cat(gettext("\nMean Grouping Range Test (BATISTA, 2016)\n\n", domain = "R-MCP"))
+    #if (console) cat(gettext("\nMean Grouping Range Test (BATISTA, 2016)\n\n", domain = "R-MCP"))
     statistics <- data.frame(Exp.Mean = Mean,
                              CV      = CV,
                              MSerror = mserror,
@@ -375,7 +375,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
                              n       = n,
                              Stud.Range = Rq,
                              DMS = dms.range)
-    if (console) cat(gettext("Statistics: \n", domain = "R-MCP"))
+    #if (console) cat(gettext("Statistics: \n", domain = "R-MCP"))
     rownames(statistics) <- " "
     colnames(statistics) <- c(gettext("Exp.Mean", domain = "R-MCP"),
                                 "CV",
@@ -386,19 +386,19 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
                                 "DMS"
     )
     statistics.MGR   <- statistics
-    if (console) print(statistics)
+    #if (console) print(statistics)
     test <- MGRtest(y, trt, n, dferror, mserror, alpha, dms.range)
     test[1] <- round(test[1], 2)
     test.MGR <- test
-    if (console) cat(gettext("\nGroups: \n", domain = "R-MCP"))
-    if (console) print(test)
+    #if (console) cat(gettext("\nGroups: \n", domain = "R-MCP"))
+    #if (console) print(test)
   }
 
 
 
   # Student-Newman-Keuls (SNK) Midrange Test (BATISTA, 2016)
   if (any(MCP == "SNKM")){
-    if (console) cat(gettext("\nSNK Midrange Test (BATISTA, 2016)\n\n", domain = "R-MCP"))
+    #if (console) cat(gettext("\nSNK Midrange Test (BATISTA, 2016)\n\n", domain = "R-MCP"))
     statistics <- data.frame(Exp.Mean = Mean,
                              CV      = CV,
                              MSerror = mserror,
@@ -410,7 +410,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
     cont <- seq(1, n - 1, by = 1)
     rownames(statistics) <- cont
     rownames(statistics) <- rownames(MRq.snkm, do.NULL = FALSE, prefix = "comp")
-    if (console) cat(gettext("Statistics: \n", domain = "R-MCP"))
+    #if (console) cat(gettext("Statistics: \n", domain = "R-MCP"))
     colnames(statistics) <- c(gettext("Exp.Mean", domain = "R-MCP"),
                                 "CV",
                                 gettext("MSerror", domain = "R-MCP"),
@@ -420,17 +420,17 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
                                 "DMS"
     )
     statistics.SNKM <- round(statistics, 4)
-    if (console) print(round(statistics, 4))
+    #if (console) print(round(statistics, 4))
     test <- SNKMtest(y, trt, n, dferror, mserror, alpha, dms.snkm)
     test[1] <- round(test[1], 2)
     test.SNKM <- test
-    if (console) cat(gettext("\nGroups: \n", domain = "R-MCP"))
-    if (console) print(test)
+    #if (console) cat(gettext("\nGroups: \n", domain = "R-MCP"))
+    #if (console) print(test)
   }
 
   # Tukey Midrange Test (BATISTA, 2016)
   if (any(MCP == "TM")) {
-    if (console) cat(gettext("\nTukey Midrange Test (BATISTA, 2016)\n\n", domain = "R-MCP"))
+    #if (console) cat(gettext("\nTukey Midrange Test (BATISTA, 2016)\n\n", domain = "R-MCP"))
     statistics <- data.frame(Exp.Mean = Mean,
                              CV      = CV,
                              MSerror = mserror,
@@ -439,7 +439,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
                              Stud.Midrange = MRq,
                              Ext.DMS = dms[1],
                              Int.DMS = dms[2])
-    if (console) cat(gettext("Statistics: \n", domain = "R-MCP"))
+    #if (console) cat(gettext("Statistics: \n", domain = "R-MCP"))
     rownames(statistics) <- " "
     colnames(statistics) <- c(gettext("Exp.Mean", domain = "R-MCP"),
                                 "CV",
@@ -451,25 +451,25 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
                                 gettext("Int.DMS", domain = "R-MCP")
     )
     statistics.TM <- statistics
-    if (console) print(statistics)
+    #if (console) print(statistics)
 
     test <- TMtest(y, trt, n, dferror, mserror, alpha, dms)
     test[1] <- round(test[1], 2)
     test.TM <- test
-    if (console) cat(gettext("\nGroups: \n", domain = "R-MCP"))
-    if (console) print(test)
+    #if (console) cat(gettext("\nGroups: \n", domain = "R-MCP"))
+    #if (console) print(test)
   }
 
   # Scott-Knott's test (SCOTT-KNOTT, 1974)
   if (any(MCP == "SK")) {
-    if (console) cat(gettext("\nScott-Knott's Test (SCOTT-KNOTT, 1974)\n\n", domain = "R-MCP"))
+    #if (console) cat(gettext("\nScott-Knott's Test (SCOTT-KNOTT, 1974)\n\n", domain = "R-MCP"))
     statistics <- data.frame(Exp.Mean = Mean,
                              CV      = CV,
                              MSerror = mserror,
                              DF      = dferror,
                              n       = n
                              )
-    if (console) cat(gettext("Statistics: \n", domain = "R-MCP"))
+    #if (console) cat(gettext("Statistics: \n", domain = "R-MCP"))
     rownames(statistics) <- " "
     colnames(statistics) <- c(gettext("Exp.Mean", domain = "R-MCP"),
                                 "CV",
@@ -478,12 +478,12 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
                                 "n"
     )
     statistics.SK <- statistics
-    if (console) print(statistics)
+    #if (console) print(statistics)
 
     test <- sktest(y, trt, dferror, mserror, rh, alpha, parallel)
     test.SK <- test
-    if (console) cat(gettext("\nGroups: \n", domain = "R-MCP"))
-    if (console) print(test)
+    #if (console) cat(gettext("\nGroups: \n", domain = "R-MCP"))
+    #if (console) print(test)
   }
 
   #All statistics
@@ -505,7 +505,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
 
   alltest    <- 1:5
   nas        <- nas[order(nas, na.last = NA)]
-  ntest      <- alltest[- nas]
+  ntest      <- alltest[-nas]
 
   if (length(nas) == 5) {
     statistics <- stat.tests
@@ -525,5 +525,6 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
                     Groups  = grouptest,
                  Statistics = statistics,
                      Tests  = MCP)
-  invisible(output)
+  #invisible(output)
+  return(output)
 }

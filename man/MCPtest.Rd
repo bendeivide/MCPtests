@@ -50,10 +50,6 @@ If \code{TRUE} the \code{y} argument represents the mean of treatments.}
 \item{parallel}{Logic. If \code{FALSE} (default), the \code{MCPtest} function
 runs without parallelization. Otherwise, the code is executed with
 parallelization. Note that the parallelization is not always more efficient.}
-
-\item{console}{Logic. If \code{TRUE} (default), the \code{MCPtest} function
-runs without parallelization. prints the results on the console even
-though the results are stored in an object. If \code{FALSE}, otherside.}
 }
 \value{
 \code{MCPtest} returns the print of a list of results. First,

@@ -23,6 +23,9 @@ available: \code{"groups"}, \code{"summary"} or \code{"all"}. The option
 in the \code{MCP} argument.  The \code{"summary"} writes the descriptive
 statistics of the response variable. The options \code{"all"} should be chosen
 for both results.}
+
+\item{console}{Logic. If \code{TRUE} (default), the \code{MCPwrite} function
+prints the file extensions and the directory path. If \code{FALSE}, otherside.}
 }
 \value{
 \code{MCPwrite} writes the most important results for the chosen
