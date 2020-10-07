@@ -14,8 +14,6 @@
 #'     in the \code{MCP} argument.  The \code{"summary"} writes the descriptive
 #'     statistics of the response variable. The options \code{"all"} should be chosen
 #'     for both results.
-#' @param console Logic. If \code{TRUE} (default), the \code{MCPwrite} function
-#' prints the file extensions and the directory path. If \code{FALSE}, otherside.
 #' @return \code{MCPwrite} writes the most important results for the chosen
 #'     tests in the \code{MCP} argument.
 #' @details Note that the choice of the tests in the \code{MCPwrite}
@@ -154,7 +152,7 @@ MCPwrite <- function(x, MCP = "all", extension = "csv",
         ntrt <- length(trt)
         dat  <- data.frame(trt, x[[2]][[1]])
         rownames(dat) <- 1:ntrt
-        #message(gettext("Table in latex of results of the MGM test\n\n", domain = "R-MCP"))
+        #message(gettext("Table in latex of results of the MGM test\n\n", domain = "R-MCPtests"))
         test.MGM <- xtable::xtable(dat)
       }
     }
@@ -184,7 +182,7 @@ MCPwrite <- function(x, MCP = "all", extension = "csv",
         ntrt <- length(trt)
         dat  <- data.frame(trt, x[[2]][[cont + 1]])
         rownames(dat) <- 1:ntrt
-        #if (console) cat(gettext("\n\nTable in latex of results of the MGR test\n\n", domain = "R-MCP"))
+        #if (console) cat(gettext("\n\nTable in latex of results of the MGR test\n\n", domain = "R-MCPtests"))
         test.MGR <- xtable::xtable(dat)
       }
     }
@@ -214,7 +212,7 @@ MCPwrite <- function(x, MCP = "all", extension = "csv",
         ntrt <- length(trt)
         dat  <- data.frame(trt, x[[2]][[cont + 1]])
         rownames(dat) <- 1:ntrt
-        #if (console) cat(gettext("\n\nTable in latex of results of the SNKM test\n\n", domain = "R-MCP"))
+        #if (console) cat(gettext("\n\nTable in latex of results of the SNKM test\n\n", domain = "R-MCPtests"))
         test.SNKM <- xtable::xtable(dat)
       }
     }
@@ -244,7 +242,7 @@ MCPwrite <- function(x, MCP = "all", extension = "csv",
         ntrt <- length(trt)
         dat  <- data.frame(trt, x[[2]][[cont + 1]])
         rownames(dat) <- 1:ntrt
-        #if (console) cat(gettext("\n\nTable in latex of results of the TM test\n\n", domain = "R-MCP"))
+        #if (console) cat(gettext("\n\nTable in latex of results of the TM test\n\n", domain = "R-MCPtests"))
         test.TM <- xtable::xtable(dat)
       }
     }
@@ -274,7 +272,7 @@ MCPwrite <- function(x, MCP = "all", extension = "csv",
         dat <- data.frame(trt, x[[2]][[cont + 1]][[2]])
         ntrt <- length(trt)
         rownames(dat) <- 1:ntrt
-        #if (console) cat(gettext("\n\nTable in latex of results of the Scott-Knott's test\n\n", domain = "R-MCP"))
+        #if (console) cat(gettext("\n\nTable in latex of results of the Scott-Knott's test\n\n", domain = "R-MCPtests"))
         test.SK <- xtable::xtable(dat)
       }
     }
@@ -304,17 +302,17 @@ MCPwrite <- function(x, MCP = "all", extension = "csv",
       ntrt <- length(trt)
       dat  <- data.frame(trt, x[[1]])
       rownames(dat) <- 1:ntrt
-      #if (console) cat(gettext("\n\nTable in latex of results of descriptive statistics\n\n", domain = "R-MCP"))
+      #if (console) cat(gettext("\n\nTable in latex of results of descriptive statistics\n\n", domain = "R-MCPtests"))
       statdesc <- xtable::xtable(dat)
     }
   }
   # if (extension == "latex"){
-  #   message(gettext("\nSee yours tables in Console\n", domain = "R-MCP"))
-  #   message(gettext("Format: ", domain = "R-MCP"), extension)
+  #   message(gettext("\nSee yours tables in Console\n", domain = "R-MCPtests"))
+  #   message(gettext("Format: ", domain = "R-MCPtests"), extension)
   # }
   if (extension != "latex"){
-    message(gettext("See your files in directory path", domain = "R-MCP"))
-    message(gettext("Format: ", domain = "R-MCP"), extension)
+    message(gettext("See your files in Directory", domain = "R-MCPtests"))
+    message(gettext("Format: ", domain = "R-MCPtests"), extension)
   }
   #All groups
   group.tests <- list(group.MGM  = test.MGM,
@@ -337,7 +335,7 @@ MCPwrite <- function(x, MCP = "all", extension = "csv",
     grouptest  <- group.tests[-ntest]
   }
   if (extension != "latex") {
-    output <- gettext("See your files in directory path", domain = "R-MCP")
+    output <- gettext("See your files in Directory", domain = "R-MCPtests")
   } else {
     output <- list(
       "Result of tests" = grouptest,

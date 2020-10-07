@@ -14,8 +14,7 @@ MCPtest(
   main = NULL,
   MCP = "all",
   ismean = FALSE,
-  parallel = FALSE,
-  console = TRUE
+  parallel = FALSE
 )
 }
 \arguments{

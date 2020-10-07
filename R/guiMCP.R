@@ -27,19 +27,23 @@ guiMCP <- function(gui = TRUE) {
   # # Ingles
   # Sys.setenv(LANG = "en")
 
+  # Environment of package
+  envMCP <- new.env(parent = base::emptyenv())
+  assign("dat", NULL, envir = envMCP)
+  assign("results", NULL, envir = envMCP)
+  assign("LaTeX", NULL, envir = envMCP)
+  assign("symmb_promp", NULL, envir = envMCP)
+
   # Graphical User Interface
   if (gui == TRUE) {
-    # Protection to the 'dat' global variable
-    if (any(ls(.GlobalEnv) == "dat")) {
-      rm(list = c("dat", "dat2"), envir = .GlobalEnv)
-    }
+
     # Insert Icons
     img <- tclVar(); img2 <- tclVar(); img3 <- tclVar()
     imageinfo <- tkimage.create("photo", img, file = system.file("etc", "info2.gif", package = "MCPtests"))
     imageopen <- tkimage.create("photo", img2, file = system.file("etc", "open.gif", package = "MCPtests"))
     imagesaveas <- tkimage.create("photo", img3, file = system.file("etc", "save-as.gif", package = "MCPtests"))
     ##
-    tkimage.create("photo", "::image::logoMCP", file = system.file("etc", "MCP.gif", package = "MCPtests"))
+    tkimage.create("photo", "::image::logoMCP", file = system.file("etc", "MCP1.gif", package = "MCPtests"))
     tkimage.create("photo", "::image::MCP2", file = system.file("etc", "MCP2.gif", package = "MCPtests"))
     tkimage.create("photo", "::image::MCP3",
                    file = system.file("etc", "MCP3.gif", package = "MCPtests"))
@@ -51,7 +55,7 @@ guiMCP <- function(gui = TRUE) {
 
     # Auxiliar functions
     addScrollbars <- function(parent, widget,type=c("both", "x", "y")) {
-      if(any(type %in% c("both","x"))) {
+      if (any(type %in% c("both","x"))) {
         xscr <- ttkscrollbar(parent, orient = "horizontal",
                              command = function(...) tkxview(widget, ...))
         tkconfigure(widget,
@@ -66,12 +70,12 @@ guiMCP <- function(gui = TRUE) {
       }
 
       ## place in grid
-      tkgrid(widget, row=0, column=0, sticky="news")
-      if(any(type %in% c("both", "x"))) {
-        tkgrid(xscr, row=1, column=0, sticky="ew")
+      tkgrid(widget, row=0, column = 0, sticky = "news")
+      if (any(type %in% c("both", "x"))) {
+        tkgrid(xscr, row=1, column = 0, sticky="ew")
         tkgrid.columnconfigure(parent, 0, weight=1)
       }
-      if(any(type %in% c("both", "y"))) {
+      if (any(type %in% c("both", "y"))) {
         tkgrid(yscr,row=0,column=1, sticky="ns")
         tkgrid.rowconfigure(parent, 0, weight=1)
       }
@@ -145,7 +149,7 @@ guiMCP <- function(gui = TRUE) {
 
     # Title
     tkwm.title(topwinMCP,
-               gettext("GUI to the MCP package", domain = "R-MCP"))
+               gettext("GUI to the MCP package", domain = "R-MCPtests"))
 
     #Icon main toplevel window
     tcl("wm", "iconphoto", topwinMCP, "-default", "::image::logoMCP")
@@ -186,7 +190,7 @@ guiMCP <- function(gui = TRUE) {
         confdata <- tktoplevel()
         tkwm.resizable(confdata, FALSE, FALSE)
         tkwm.title(confdata,
-                   gettext("Configurations of the data", domain = "R-MCP"))
+                   gettext("Configurations of the data", domain = "R-MCPtests"))
       }
       # Group of buttons
       tkpack(group_cbox <- tkframe(parent = confdata),
@@ -195,7 +199,7 @@ guiMCP <- function(gui = TRUE) {
 
       # Checkbox
       tkpack(group_cbox_1 <- tkcheckbutton(parent = group_cbox,
-                                           text = gettext("Comma as decimal points", domain = "R-MCP"),
+                                           text = gettext("Comma as decimal points", domain = "R-MCPtests"),
                                            variable = group_cbox_1_resp,
                                            onvalue = "TRUE",
                                            offvalue = "FALSE"),
@@ -208,7 +212,7 @@ guiMCP <- function(gui = TRUE) {
       ##
       tkpack(tklabel(parent = group_cbox,
                      text = gettext("Separator of variables:",
-                                    domain = "R-MCP")),
+                                    domain = "R-MCPtests")),
              side = "left", anchor = "nw", padx = "1m"
       )
       ##
@@ -222,7 +226,7 @@ guiMCP <- function(gui = TRUE) {
       tkpack(ttkseparator(parent = confdata, orient = "horizontal"),
              fill = "x")
       tkpack(bconfdata <- ttkbutton(parent = confdata,
-                                    text = gettext("Enter the data", domain = "R-MCP")), anchor = "e")
+                                    text = gettext("Enter the data", domain = "R-MCPtests")), anchor = "e")
 
       tclServiceMode(TRUE)
       tkfocus(bconfdata)
@@ -234,12 +238,11 @@ guiMCP <- function(gui = TRUE) {
         start_dir <- tclvalue(filetemp)
         if (file.exists(start_dir)) {
           tkwm.withdraw(confdata)
-          dat <- NULL
-          dat2 <- NULL
-          dat2 <<- dat <<- f.read(start_dir)
+          envMCP$dat <- f.read(start_dir)
+
           tcl(search_results, "delete", "1.0", "end")
           tkinsert(search_results, "end",
-                   paste(gettext("The variables in the file:", domain = "R-MCP"),
+                   paste(gettext("The variables in the file:", domain = "R-MCPtests"),
                          "===========================",
                          as.character(start_dir),
                          "===========================",
@@ -250,13 +253,12 @@ guiMCP <- function(gui = TRUE) {
                          sep = "\n"), "variablesTag")
           tkinsert(search_results, "end", "\n")
           tkinsert(search_results, "end",
-                   paste("===========================",
-                         gettext("R object created: 'dat'", domain = "R-MCP"), sep = "\n"))
-          tkmessageBox(message = gettext("Check the data has been loaded correctly. To do this, use the 'Edit/View' button or the 'Output' frame.", domain = "R-MCP"))
+                   paste("==========================="))
+          tkmessageBox(message = gettext("Check the data has been loaded correctly. To do this, use the 'Edit/View' button or the 'Output' frame.", domain = "R-MCPtests"))
         }
         if (file.exists(start_dir) == FALSE) {
           tkwm.withdraw(confdata)
-          tkmessageBox(message = gettext("No data set has been entered!", domain = "R-MCP"))
+          tkmessageBox(message = gettext("No data set has been entered!", domain = "R-MCPtests"))
         }
       }
       tkbind(bconfdata, "<ButtonRelease>", funcbconfdata)
@@ -279,28 +281,26 @@ guiMCP <- function(gui = TRUE) {
         on.exit(setwd(dir_name)) # Return initial directory
       }
     }
-    tkadd(file_menu, 'command', label = gettext('Choose directory...', domain = "R-MCP"),
+    tkadd(file_menu, 'command', label = gettext('Choose directory...', domain = "R-MCPtests"),
           accelerator = 'Ctrl+Shift+H', command = chosdir,
           image = "::image::directory", compound = "left")
-    tkadd(menu_bar, 'cascade', label = gettext('File', domain = "R-MCP"), menu = file_menu)
-    tkadd(file_menu, 'command', label = gettext('Open file (.txt or .csv)...', domain = "R-MCP"),
+    tkadd(menu_bar, 'cascade', label = gettext('File', domain = "R-MCPtests"), menu = file_menu)
+    tkadd(file_menu, 'command', label = gettext('Open file (.txt or .csv)...', domain = "R-MCPtests"),
           accelerator = 'Ctrl+O', command = openfile, image = tclvalue(imageopen), compound = "left")
 
 
     ## Edit menu
     # This variable is important in the event of the "bentry" button
-    dat2 <- NULL # This variable is internal, not exported to the console
     fedit <- function(...) {
-      if (is.null(dat2)) {
-        tkmessageBox(message = gettext("No data set has been entered!", domain = "R-MCP"))
+      if (is.null(envMCP$dat)) {
+        tkmessageBox(message = gettext("No data set has been entered!", domain = "R-MCPtests"))
       } else{
-        dat <- NULL
-        dat2 <<- dat <- dat <<- edit(dat2)
+        envMCP$dat <- edit(envMCP$dat)
       }
     }
     edit_menu <- tkmenu(menu_bar, tearoff = FALSE)
-    tkadd(menu_bar, "cascade", label = gettext("Edit", domain = "R-MCP"), menu = edit_menu)
-    tkadd(edit_menu, "command", label = gettext("Data set...", domain = "R-MCP"),
+    tkadd(menu_bar, "cascade", label = gettext("Edit", domain = "R-MCPtests"), menu = edit_menu)
+    tkadd(edit_menu, "command", label = gettext("Data set...", domain = "R-MCPtests"),
           accelerator = "Ctrl+E", command = fedit,
           image = "::image::edit", compound = "left")
 
@@ -391,7 +391,7 @@ guiMCP <- function(gui = TRUE) {
 
     #tkpack(tklabel(paren = Q1.1, image = "::image::MCP3"), side = "left", anchor = "nw")
     # Frame
-    tkpack(frame.input <- ttklabelframe(text = gettext("Input", domain = "R-MCP"), parent = Q1.1,
+    tkpack(frame.input <- ttklabelframe(text = gettext("Input", domain = "R-MCPtests"), parent = Q1.1,
                                         style = "Toolbar.TLabelframe"),
            side = "left",
            anchor = "n",
@@ -406,7 +406,7 @@ guiMCP <- function(gui = TRUE) {
            fill = "x"
     )
     # Tests
-    tkpack(tklabel(text = gettext("Tests:", domain = "R-MCP"), parent = group.input.top),
+    tkpack(tklabel(text = gettext("Tests:", domain = "R-MCPtests"), parent = group.input.top),
            side = "left",
            anchor = "nw"
     )
@@ -424,10 +424,10 @@ guiMCP <- function(gui = TRUE) {
            padx = "1m"
     )
     ##
-    tkpack(bgit <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkpack(bgit <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                             parent = group.input.top, borderwidth = 0, image = tclvalue(imageinfo),
                             command = function(...){
-                              tkmessageBox(message = gettext("Choose the type of extension for the data output file. If 'latex', the code will be exported to the Console frame. The remaining options will be exported to the selected directory. The choice of the directory can be made in the 'Choosing the directory' button.", domain = "R-MCP"))
+                              tkmessageBox(message = gettext("Choose the type of extension for the data output file. If 'latex', the code will be exported to the Console frame. The remaining options will be exported to the selected directory. The choice of the directory can be made in the 'Choosing the directory' button.", domain = "R-MCPtests"))
                             }),
            side = "left",
            anchor = "nw"
@@ -435,17 +435,17 @@ guiMCP <- function(gui = TRUE) {
 
     ## Parallelization
     ##
-    tkpack(bparalell <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkpack(bparalell <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                                  parent = group.input.top, borderwidth = 0, image = tclvalue(imageinfo),
                                  command = function(...) {
-                                   tkmessageBox(message = gettext("Parallelization is still limited for some tests, such as the Scott-Knott's test. However, it is worth mentioning that it is not always efficient to use parallelization, especially when the data set is small.", domain = "R-MCP"))
+                                   tkmessageBox(message = gettext("Parallelization is still limited for some tests, such as the Scott-Knott's test. However, it is worth mentioning that it is not always efficient to use parallelization, especially when the data set is small.", domain = "R-MCPtests"))
                                  }),
            side = "right",
            anchor = "ne"
     )
     ckeckparallel_resp <- tclVar("FALSE")
     tkpack(ckeckparallel <- tkcheckbutton(parent = group.input.top,
-                                          text = gettext("Parallel", domain = "R-MCP"),
+                                          text = gettext("Parallel", domain = "R-MCPtests"),
                                           variable = ckeckparallel_resp,
                                           onvalue = "TRUE",
                                           offvalue = "FALSE"),
@@ -463,10 +463,10 @@ guiMCP <- function(gui = TRUE) {
     ##
     ## Export
     ##
-    tkpack(bexp <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkpack(bexp <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                             parent = group.input.top, borderwidth = 0, image = tclvalue(imageinfo),
                             command = function(...) {
-                              tkmessageBox(message = gettext("Choose the type of extension for the data output file. If 'latex', the code will be exported to the Console frame. The remaining options will be exported to the selected directory. The choice of the directory can be made in the 'Choosing the directory' button.", domain = "R-MCP"))
+                              tkmessageBox(message = gettext("Choose the type of extension for the data output file. If 'latex', the code will be exported to the Console frame. The remaining options will be exported to the selected directory. The choice of the directory can be made in the 'Choosing the directory' button.", domain = "R-MCPtests"))
                             }),
            side = "right",
            anchor = "ne"
@@ -486,7 +486,7 @@ guiMCP <- function(gui = TRUE) {
            padx = "1m"
     )
     ##
-    tkpack(tklabel(text = gettext("Extension: ", domain = "R-MCP"),
+    tkpack(tklabel(text = gettext("Extension: ", domain = "R-MCPtests"),
                    parent = group.input.top),
            side = "right",
            anchor = "ne"
@@ -505,15 +505,15 @@ guiMCP <- function(gui = TRUE) {
            fill = "x"
     )
     tkpack(tklabel(text = gettext("Options:",
-                                  domain = "R-MCP"),
+                                  domain = "R-MCPtests"),
                    parent = frame.input),
            side = "left",
            anchor = "nw"
     )
     ##
-    entry <- c(gettext("Model", domain = "R-MCP"),
-               gettext("Response variable", domain = "R-MCP"),
-               gettext("Averages", domain = "R-MCP"))
+    entry <- c(gettext("Model", domain = "R-MCPtests"),
+               gettext("Response variable", domain = "R-MCPtests"),
+               gettext("Averages", domain = "R-MCPtests"))
     vari3 <- tclVar(entry[1])
 
     # Auxiliar Function
@@ -532,7 +532,7 @@ guiMCP <- function(gui = TRUE) {
     )
 
     tkbind(entry_combobox, "<<ComboboxSelected>>", function(...){
-      if (tclvalue(vari3) == gettext("Response variable", domain = "R-MCP")) {
+      if (tclvalue(vari3) == gettext("Response variable", domain = "R-MCPtests")) {
         tcl(group.rv, "state", "!disabled")
         child.group.rv <- as.character(tkwinfo("children", group.rv))
         sapply(child.group.rv, function(W) {
@@ -547,7 +547,7 @@ guiMCP <- function(gui = TRUE) {
           tcl(W, "configure", "-state", "disabled")
         })
       }
-      if (tclvalue(vari3) == gettext("Model", domain = "R-MCP")) {
+      if (tclvalue(vari3) == gettext("Model", domain = "R-MCPtests")) {
         tcl(group.rv, "state", "!disabled")
         child.group.rv <- as.character(tkwinfo("children", group.rv))
         sapply(child.group.rv, function(W) {
@@ -562,7 +562,7 @@ guiMCP <- function(gui = TRUE) {
           tcl(W, "configure", "-state", "disabled")
         })
       }
-      if (tclvalue(vari3) == gettext("Averages", domain = "R-MCP")) {
+      if (tclvalue(vari3) == gettext("Averages", domain = "R-MCPtests")) {
         tcl(group.rv, "state", "!disabled")
         child.group.rv <- as.character(tkwinfo("children", group.rv))
         sapply(child.group.rv, function(W) {
@@ -580,10 +580,10 @@ guiMCP <- function(gui = TRUE) {
     })
 
     tkpack(bentry <- tkbutton(text = gettext("help",
-                                             domain = "R-MCP"),
+                                             domain = "R-MCPtests"),
                               parent = frame.input, borderwidth = 0, image = tclvalue(imageinfo),
                               command = function(...){
-                                tkmessageBox(message = gettext("Choose the type of data entry. If 'Model', enter the experimental model. If 'Response Variable', enter the object name of the responses and treatments variables and if 'Averages', enter the vector of means and treatments. For more details, use the help button on each option. \n The 'Averages' option is the only one that will not need to load a data set. Just enter the recommended options and then click the 'Calculate' button.", domain = "R-MCP"))
+                                tkmessageBox(message = gettext("Choose the type of data entry. If 'Model', enter the experimental model. If 'Response Variable', enter the object name of the responses and treatments variables and if 'Averages', enter the vector of means and treatments. For more details, use the help button on each option. \n The 'Averages' option is the only one that will not need to load a data set. Just enter the recommended options and then click the 'Calculate' button.", domain = "R-MCPtests"))
                               }
     ),
     side = "left",
@@ -593,10 +593,10 @@ guiMCP <- function(gui = TRUE) {
 
 
     # Significance level
-    tkpack(bsl <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkpack(bsl <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                            parent = frame.input, borderwidth = 0, image = tclvalue(imageinfo),
                            command = function(...){
-                             tkmessageBox(message = gettext("Enter the value of the significance level. This value is a number between 0 and 1.", domain = "R-MCP"))
+                             tkmessageBox(message = gettext("Enter the value of the significance level. This value is a number between 0 and 1.", domain = "R-MCPtests"))
                            }),
            side = "right",
            anchor = "ne"
@@ -610,7 +610,7 @@ guiMCP <- function(gui = TRUE) {
            anchor = "ne", padx = "2m", side = "right")
 
     tkpack(tklabel(text = gettext("Significance:",
-                                  domain = "R-MCP"),
+                                  domain = "R-MCPtests"),
                    parent = frame.input),
            side = "right",
            anchor = "ne"
@@ -618,7 +618,7 @@ guiMCP <- function(gui = TRUE) {
 
     # Output
     tkpack(frame.output <- ttklabelframe(text = gettext("Output:",
-                                                        domain = "R-MCP"),
+                                                        domain = "R-MCPtests"),
                                          parent = Q1,
                                          width = 30, height = 10, style = "Toolbar.TLabelframe"),
            side = "top",
@@ -647,7 +647,7 @@ guiMCP <- function(gui = TRUE) {
     # Button Calculate
     ##################
     tkpack(calculate_button <- ttkbutton(text = gettext("Calculate",
-                                                        domain = "R-MCP"),
+                                                        domain = "R-MCPtests"),
                                          parent = child2.group1),
            side = "bottom",
            anchor = "s",
@@ -676,22 +676,22 @@ guiMCP <- function(gui = TRUE) {
     }
     ##
     calcular <- function(...){
-      results <- NULL
       tcl(console, "delete", "1.0", "end")
-      if (tclvalue(vari3) == gettext("Model", domain = "R-MCP")) {
-        capture.output(results <- results <<- MCPtests::MCPtest(y = aov(eval(parse(text = tclvalue(vari5))), data = dat),
+      if (tclvalue(vari3) == gettext("Model", domain = "R-MCPtests")) {
+        capture.output(envMCP$results <- MCPtests::MCPtest(y = aov(eval(parse(text = tclvalue(vari5))), data = envMCP$dat),
                                                                   trt = tclvalue(vari6),
                                                                   alpha = eval(parse(text = tclvalue(vari4))),
                                                                   MCP = tclvalue(vari),
                                                                   parallel = eval(parse(text = tclvalue(ckeckparallel_resp)))))
-        objtreat <- as.factor(dat[,tclvalue(vari6)])
+        objtreat <- as.factor(envMCP$dat[,tclvalue(vari6)])
 
         # Results in the Console
         if (tclvalue(vari2) == "latex") {
-          eval_cmd_chunk(console, "results; MCPtests::MCPwrite(x = results, extension = 'latex')")
+          envMCP$LaTeX <- MCPtests::MCPwrite(x = envMCP$results, extension = 'latex')
+          eval_cmd_chunk(console, "results; LaTeX")
         }
         if (tclvalue(vari2) != "latex") {
-          MCPtests::MCPwrite(x = results, MCP = 'all', extension = tclvalue(vari2), dataMR = 'all')
+          MCPtests::MCPwrite(x = envMCP$results, MCP = 'all', extension = tclvalue(vari2), dataMR = 'all')
           eval_cmd_chunk(console, "results")
         }
 
@@ -721,7 +721,7 @@ guiMCP <- function(gui = TRUE) {
         ##
         plottopwinMCP <- tkplot(parent = frameplot,
                                 function(...) {
-                                  MCPtests::MCPbarplot(results,col = heat.colors(length(levels(objtreat))))
+                                  MCPtests::MCPbarplot(envMCP$results,col = heat.colors(length(levels(objtreat))))
                                 }, hscale = fator, vscale = fator)
         # Auxiliar function
         f <- function(...) {
@@ -734,19 +734,19 @@ guiMCP <- function(gui = TRUE) {
         # Button save as...
         #graphics.off() # Erasing All Graphics Devices
         dispplot <- NULL
-        bsaveas <- tkbutton(parent = framelabelaux, text = gettext("Save as...", domain = "R-MCP"),
+        bsaveas <- tkbutton(parent = framelabelaux, text = gettext("Save as...", domain = "R-MCPtests"),
                             borderwidth = 0, underline = 0,
                             image = tclvalue(imagesaveas), compound = "top",
                             command = function(...){
                               dispplot <<- grDevices::dev.new(noRStudioGD = TRUE) # New device plot
                               #grDevices::dev.new(noRStudioGD = TRUE) # New device plot
-                              if (tclvalue(vari3) == gettext("Model", domain = "R-MCP")) {
-                                objtreat <- as.factor(dat[,tclvalue(vari6)])
+                              if (tclvalue(vari3) == gettext("Model", domain = "R-MCPtests")) {
+                                objtreat <- as.factor(envMCP$dat[,tclvalue(vari6)])
                               }
-                              if (tclvalue(vari3) == gettext("Response variable", domain = "R-MCP")) {
-                                objtreat <- as.factor(dat[,tclvalue(vari8)])
+                              if (tclvalue(vari3) == gettext("Response variable", domain = "R-MCPtests")) {
+                                objtreat <- as.factor(envMCP$dat[,tclvalue(vari8)])
                               }
-                              if (tclvalue(vari3) == gettext("Averages", domain = "R-MCP")) {
+                              if (tclvalue(vari3) == gettext("Averages", domain = "R-MCPtests")) {
                                 # Treatment levels
                                 trat <- strsplit(tclvalue(vari12), split = ",", perl = TRUE)[[1]]
                                 trat <- as.factor(trat)
@@ -769,7 +769,7 @@ guiMCP <- function(gui = TRUE) {
                                   color <- eval(parse(text = tclvalue(vari16)))
                                 }
                               }
-                              MCPtests::MCPbarplot(results, col = color, horiz = hor, xlab = xlab, ylab = ylab)
+                              MCPtests::MCPbarplot(envMCP$results, col = color, horiz = hor, xlab = xlab, ylab = ylab)
                             })
         tkpack(bsaveas, side = "left")
 
@@ -778,7 +778,7 @@ guiMCP <- function(gui = TRUE) {
                                           padding = c(3,3,3,3)),
                side = "top", fill = "x", expand = TRUE)
         #Label
-        scalelabel <- tklabel(parent = framelabelaux2, text = gettext("Scale of Plot", domain = "R-MCP"))
+        scalelabel <- tklabel(parent = framelabelaux2, text = gettext("Scale of Plot", domain = "R-MCPtests"))
         # Scale of plot
         s <- tkscale(framelabelaux2, command = f, from = 1, to = 3.00, variable = "fator",
                      showvalue = TRUE, resolution = 0.05, orient = "horiz", borderwidth = 0)
@@ -798,7 +798,7 @@ guiMCP <- function(gui = TRUE) {
         # #addScrollbars(frame.graf, img)
 
       }
-      if (tclvalue(vari3) == gettext("Response variable", domain = "R-MCP")) {
+      if (tclvalue(vari3) == gettext("Response variable", domain = "R-MCPtests")) {
         objrv <- dat[,tclvalue(vari7)]
         objtreat <- as.factor(dat[,tclvalue(vari8)])
         capture.output(results <- results <<- MCPtests::MCPtest(y = objrv,
@@ -843,7 +843,7 @@ guiMCP <- function(gui = TRUE) {
         ##
         plottopwinMCP <- tkplot(parent = frameplot,
                                 function(...) {
-                                  MCPtests::MCPbarplot(results,col = heat.colors(length(levels(objtreat))))
+                                  MCPtests::MCPbarplot(envMCP$results,col = heat.colors(length(levels(objtreat))))
                                 }, hscale = fator, vscale = fator)
         # Auxiliar function
         f <- function(...) {
@@ -856,19 +856,19 @@ guiMCP <- function(gui = TRUE) {
         # Button save as...
         #graphics.off() # Erasing All Graphics Devices
         dispplot <- NULL
-        bsaveas <- tkbutton(parent = framelabelaux, text = gettext("Save as...", domain = "R-MCP"),
+        bsaveas <- tkbutton(parent = framelabelaux, text = gettext("Save as...", domain = "R-MCPtests"),
                             borderwidth = 0, underline = 0,
                             image = tclvalue(imagesaveas), compound = "top",
                             command = function(...){
                               dispplot <<- grDevices::dev.new(noRStudioGD = TRUE) # New device plot
                               #grDevices::dev.new(noRStudioGD = TRUE) # New device plot
-                              if (tclvalue(vari3) == gettext("Model", domain = "R-MCP")) {
-                                objtreat <- as.factor(dat[,tclvalue(vari6)])
+                              if (tclvalue(vari3) == gettext("Model", domain = "R-MCPtests")) {
+                                objtreat <- as.factor(envMCP$dat[,tclvalue(vari6)])
                               }
-                              if (tclvalue(vari3) == gettext("Response variable", domain = "R-MCP")) {
-                                objtreat <- as.factor(dat[,tclvalue(vari8)])
+                              if (tclvalue(vari3) == gettext("Response variable", domain = "R-MCPtests")) {
+                                objtreat <- as.factor(envMCP$dat[,tclvalue(vari8)])
                               }
-                              if (tclvalue(vari3) == gettext("Averages", domain = "R-MCP")) {
+                              if (tclvalue(vari3) == gettext("Averages", domain = "R-MCPtests")) {
                                 # Treatment levels
                                 trat <- strsplit(tclvalue(vari12), split = ",", perl = TRUE)[[1]]
                                 trat <- as.factor(trat)
@@ -891,7 +891,7 @@ guiMCP <- function(gui = TRUE) {
                                   color <- eval(parse(text = tclvalue(vari16)))
                                 }
                               }
-                              MCPtests::MCPbarplot(results, col = color, horiz = hor, xlab = xlab, ylab = ylab)
+                              MCPtests::MCPbarplot(envMCP$results, col = color, horiz = hor, xlab = xlab, ylab = ylab)
                             })
         tkpack(bsaveas, side = "left")
 
@@ -900,7 +900,7 @@ guiMCP <- function(gui = TRUE) {
                                           padding = c(3,3,3,3)),
                side = "top", fill = "x", expand = TRUE)
         #Label
-        scalelabel <- tklabel(parent = framelabelaux2, text = gettext("Scale of Plot", domain = "R-MCP"))
+        scalelabel <- tklabel(parent = framelabelaux2, text = gettext("Scale of Plot", domain = "R-MCPtests"))
         # Scale of plot
         s <- tkscale(framelabelaux2, command = f, from = 1, to = 3.00, variable = "fator",
                      showvalue = TRUE, resolution = 0.05, orient = "horiz", borderwidth = 0)
@@ -917,7 +917,7 @@ guiMCP <- function(gui = TRUE) {
         tkpack(plottopwinMCP,  fill = "both", expand = TRUE)
         addScrollbars(frameplot, plottopwinMCP)
       }
-      if (tclvalue(vari3) == gettext("Averages", domain = "R-MCP")) {
+      if (tclvalue(vari3) == gettext("Averages", domain = "R-MCPtests")) {
         # if (!is.factor(eval(parse(text = svalue(gme2d))))){
         #   gmessage("The trt argument must be factor")
         # }
@@ -972,7 +972,7 @@ guiMCP <- function(gui = TRUE) {
         ##
         plottopwinMCP <- tkplot(parent = frameplot,
                                 function(...) {
-                                  MCPtests::MCPbarplot(results,col = heat.colors(length(levels(trat))))
+                                  MCPtests::MCPbarplot(envMCP$results,col = heat.colors(length(levels(trat))))
                                 }, hscale = fator, vscale = fator)
         # Auxiliar function
         f <- function(...) {
@@ -985,19 +985,19 @@ guiMCP <- function(gui = TRUE) {
         # Button save as...
         #graphics.off() # Erasing All Graphics Devices
         dispplot <- NULL
-        bsaveas <- tkbutton(parent = framelabelaux, text = gettext("Save as...", domain = "R-MCP"),
+        bsaveas <- tkbutton(parent = framelabelaux, text = gettext("Save as...", domain = "R-MCPtests"),
                             borderwidth = 0, underline = 0,
                             image = tclvalue(imagesaveas), compound = "top",
                             command = function(...){
                               dispplot <<- grDevices::dev.new(noRStudioGD = TRUE) # New device plot
                               #grDevices::dev.new(noRStudioGD = TRUE) # New device plot
-                              if (tclvalue(vari3) == gettext("Model", domain = "R-MCP")) {
-                                objtreat <- as.factor(dat[,tclvalue(vari6)])
+                              if (tclvalue(vari3) == gettext("Model", domain = "R-MCPtests")) {
+                                objtreat <- as.factor(envMCP$dat[,tclvalue(vari6)])
                               }
-                              if (tclvalue(vari3) == gettext("Response variable", domain = "R-MCP")) {
-                                objtreat <- as.factor(dat[,tclvalue(vari8)])
+                              if (tclvalue(vari3) == gettext("Response variable", domain = "R-MCPtests")) {
+                                objtreat <- as.factor(envMCP$dat[,tclvalue(vari8)])
                               }
-                              if (tclvalue(vari3) == gettext("Averages", domain = "R-MCP")) {
+                              if (tclvalue(vari3) == gettext("Averages", domain = "R-MCPtests")) {
                                 # Treatment levels
                                 trat <- strsplit(tclvalue(vari12), split = ",", perl = TRUE)[[1]]
                                 trat <- as.factor(trat)
@@ -1020,7 +1020,7 @@ guiMCP <- function(gui = TRUE) {
                                   color <- eval(parse(text = tclvalue(vari16)))
                                 }
                               }
-                              MCPtests::MCPbarplot(results, col = color, horiz = hor, xlab = xlab, ylab = ylab)
+                              MCPtests::MCPbarplot(envMCP$results, col = color, horiz = hor, xlab = xlab, ylab = ylab)
                             })
         tkpack(bsaveas, side = "left")
 
@@ -1029,7 +1029,7 @@ guiMCP <- function(gui = TRUE) {
                                           padding = c(3,3,3,3)),
                side = "top", fill = "x", expand = TRUE)
         #Label
-        scalelabel <- tklabel(parent = framelabelaux2, text = gettext("Scale of Plot", domain = "R-MCP"))
+        scalelabel <- tklabel(parent = framelabelaux2, text = gettext("Scale of Plot", domain = "R-MCPtests"))
         # Scale of plot
         s <- tkscale(framelabelaux2, command = f, from = 1, to = 3.00, variable = "fator",
                      showvalue = TRUE, resolution = 0.05, orient = "horiz", borderwidth = 0)
@@ -1053,7 +1053,7 @@ guiMCP <- function(gui = TRUE) {
     # Console
     #########
     tkpack(frame.console <- ttklabelframe(text = gettext("Console:",
-                                                         domain = "R-MCP"),
+                                                         domain = "R-MCPtests"),
                                           parent = child2.group1, style = "Toolbar.TLabelframe"),
            side = "bottom", expand = TRUE, fill = "x", anchor = "s")
     ##
@@ -1080,14 +1080,14 @@ guiMCP <- function(gui = TRUE) {
         cutoff <- 0.75 * getOption("width")
         dcmd <- deparse(cmd , width.cutoff = cutoff)
         command <-
-          paste(getOption("prompt"),
+          paste("MCPtests> ",
                 paste(dcmd, collapse = paste("\n", getOption("continue"), sep = "")) ,
                 sep = "" , collapse = "")
         tkinsert(console , "end" , command , "commandTag" )
         tkinsert(console , "end" , "\n")
         ## output, should check for errors in eval!
         # The function sink() stores the output in a file
-        output <- capture.output(eval(cmd, envir = .GlobalEnv))
+        output <- capture.output(eval(cmd, envir = envMCP))
         output <- paste(output , collapse = "\n" )
         tkinsert(console, "end", output, "outputTag" )
         tkinsert(console, "end" , "\n")
@@ -1108,12 +1108,12 @@ guiMCP <- function(gui = TRUE) {
     # Option 'Model'
     ################
     tkpack(group.model <- ttklabelframe(text = gettext("Model",
-                                                       domain = "R-MCP"),
+                                                       domain = "R-MCPtests"),
                                         parent = child21.group2, style = "Toolbar.TLabelframe"),
            expand = TRUE, fill = "both")
     ## Enter model
     tkgrid(label.model <- tklabel(text = gettext("Enter model:",
-                                  domain = "R-MCP"),
+                                  domain = "R-MCPtests"),
                    parent = group.model),
            row = 0, column = 0, sticky = "e"
     )
@@ -1124,15 +1124,15 @@ guiMCP <- function(gui = TRUE) {
            row = 0, column = 1, sticky = "e", padx = 2
     )
     ##
-    tkgrid(bm1d <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkgrid(bm1d <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                              parent = group.model, borderwidth = 0, image = tclvalue(imageinfo),
                             command = function(...) {
-                              tkmessageBox(message = gettext("Enter the experimental model of type Response Variable (RV) ~ Predictive Variables (PV). These variables are in the 'Output' frame, after entering the data set. For example, in a randomized block design, assuming the 'treat' object corresponding to the treatments, 'block' object corresponding to the blocks and 'resp' object corresponding to the variable response. So, you must enter the following expression: resp ~ trat + block.", domain = "R-MCP"))
+                              tkmessageBox(message = gettext("Enter the experimental model of type Response Variable (RV) ~ Predictive Variables (PV). These variables are in the 'Output' frame, after entering the data set. For example, in a randomized block design, assuming the 'treat' object corresponding to the treatments, 'block' object corresponding to the blocks and 'resp' object corresponding to the variable response. So, you must enter the following expression: resp ~ trat + block.", domain = "R-MCPtests"))
                             }),
            row = 0, column = 2, sticky = "e")
     ##
     ## Treatment
-    tkgrid(lm.treat <- tklabel(text = gettext("Treatment:", domain = "R-MCP"),
+    tkgrid(lm.treat <- tklabel(text = gettext("Treatment:", domain = "R-MCPtests"),
                    parent = group.model),
            row = 1, column = 0, sticky = "e"
     )
@@ -1143,10 +1143,10 @@ guiMCP <- function(gui = TRUE) {
            row = 1, column = 1, sticky = "e", padx = 2
     )
     ##
-    tkgrid(bm2d <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkgrid(bm2d <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                              parent = group.model, borderwidth = 0, image = tclvalue(imageinfo),
                             command = function(...) {
-                              tkmessageBox(message = gettext("Enter the name of the treatments in the experiment model inserted above, in Predictive Variables (PV). The name of the treatment are in the 'Output' frame, after entering the data set. Inserted all the arguments above, click on the 'Calculate' button.", domain = "R-MCP"))
+                              tkmessageBox(message = gettext("Enter the name of the treatments in the experiment model inserted above, in Predictive Variables (PV). The name of the treatment are in the 'Output' frame, after entering the data set. Inserted all the arguments above, click on the 'Calculate' button.", domain = "R-MCPtests"))
                             }),
            row = 1, column = 2, sticky = "e"
     )
@@ -1155,7 +1155,7 @@ guiMCP <- function(gui = TRUE) {
     # Option 'Response variable'
     ############################
     tkpack(group.rv <- ttklabelframe(text = gettext("Response variable",
-                                                    domain = "R-MCP"),
+                                                    domain = "R-MCPtests"),
                                      parent = child21.group2, style = "Toolbar.TLabelframe",
                                      class = "Desativado"),
            expand = TRUE, fill = "both")
@@ -1163,7 +1163,7 @@ guiMCP <- function(gui = TRUE) {
     tcl(group.rv, "state", "disabled")
     ## Response
     tkgrid(label.rv <- tklabel(text = gettext("Response:",
-                                  domain = "R-MCP"),
+                                  domain = "R-MCPtests"),
                    parent = group.rv),
            row = 0, column = 0, sticky = "e"
     )
@@ -1175,16 +1175,16 @@ guiMCP <- function(gui = TRUE) {
     )
     ##
 
-    tkgrid(bgrv1d <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkgrid(bgrv1d <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                                parent = group.rv, borderwidth = 0, image = tclvalue(imageinfo),
-                              command = function(...) tkmessageBox(message = gettext("Insert the name of the variable response of the experiment model. The name of the response variable are in the 'Output' frame, after inserting the data set.", domain = "R-MCP"))),
+                              command = function(...) tkmessageBox(message = gettext("Insert the name of the variable response of the experiment model. The name of the response variable are in the 'Output' frame, after inserting the data set.", domain = "R-MCPtests"))),
            row = 0, column = 2, sticky = "e")
     ##
     # tkbind(bgrv1d, "<ButtonRelease>", function(){
-    #   tkmessageBox(message = gettext("Insert the name of the variable response of the experiment model. The name of the response variable are in the 'Output' frame, after inserting the data set.", domain = "R-MCP"))
+    #   tkmessageBox(message = gettext("Insert the name of the variable response of the experiment model. The name of the response variable are in the 'Output' frame, after inserting the data set.", domain = "R-MCPtests"))
     # })
     ## Treatment
-    tkgrid(lrv.treat <- tklabel(text = gettext("Treatment:", domain = "R-MCP"),
+    tkgrid(lrv.treat <- tklabel(text = gettext("Treatment:", domain = "R-MCPtests"),
                    parent = group.rv),
            row = 1, column = 0, sticky = "e"
     )
@@ -1195,15 +1195,15 @@ guiMCP <- function(gui = TRUE) {
            row = 1, column = 1, sticky = "e", padx = 2
     )
     ##
-    tkgrid(bgrv2d <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkgrid(bgrv2d <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                                parent = group.rv, borderwidth = 0, image = tclvalue(imageinfo),
-                              command = function(...) tkmessageBox(message = gettext("Enter the name of the treatment of the experiment model. The name of the response variable are in the 'Output' frame, after entering the data set.", domain = "R-MCP"))),
+                              command = function(...) tkmessageBox(message = gettext("Enter the name of the treatment of the experiment model. The name of the response variable are in the 'Output' frame, after entering the data set.", domain = "R-MCPtests"))),
            row = 1, column = 2, sticky = "e"
     )
     ##
 
     ## DFerror
-    tkgrid(lrv.dfe <- tklabel(text = gettext("DFerror:", domain = "R-MCP"),
+    tkgrid(lrv.dfe <- tklabel(text = gettext("DFerror:", domain = "R-MCPtests"),
                    parent = group.rv),
            row = 2, column = 0, sticky = "e"
     )
@@ -1214,16 +1214,16 @@ guiMCP <- function(gui = TRUE) {
            row = 2, column = 1, sticky = "e", padx = 2
     )
     ##
-    tkgrid(bgrv3d <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkgrid(bgrv3d <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                                parent = group.rv, borderwidth = 0, image = tclvalue(imageinfo),
                               command = function(...) {
-                                tkmessageBox(message = gettext("Enter the numeric value of the degrees of freedom of the mean square error of the experiment model.", domain = "R-MCP"))
+                                tkmessageBox(message = gettext("Enter the numeric value of the degrees of freedom of the mean square error of the experiment model.", domain = "R-MCPtests"))
                               }),
            row = 2, column = 2, sticky = "e"
     )
     ##
     ## MSerror
-    tkgrid(lrv.mse <- tklabel(text = gettext("MSerror:", domain = "R-MCP"),
+    tkgrid(lrv.mse <- tklabel(text = gettext("MSerror:", domain = "R-MCPtests"),
                    parent = group.rv),
            row = 3, column = 0, sticky = "e"
     )
@@ -1234,10 +1234,10 @@ guiMCP <- function(gui = TRUE) {
            row = 3, column = 1, sticky = "e", padx = 2
     )
     ##
-    tkgrid(bgrv4d <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkgrid(bgrv4d <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                                parent = group.rv, borderwidth = 0, image = tclvalue(imageinfo),
                               command = function(...) {
-                                tkmessageBox(message = gettext("Enter the value of the mean square error of the experiment model. The value is numeric. Inserted all the arguments above, click on the 'Calculate' button.", domain = "R-MCP"))
+                                tkmessageBox(message = gettext("Enter the value of the mean square error of the experiment model. The value is numeric. Inserted all the arguments above, click on the 'Calculate' button.", domain = "R-MCPtests"))
                               }),
            row = 3, column = 2, sticky = "e"
     )
@@ -1246,7 +1246,7 @@ guiMCP <- function(gui = TRUE) {
     # Option 'Averages'
     ############################
     tkpack(groupmeans <- ttklabelframe(text = gettext("Averages",
-                                                      domain = "R-MCP"),
+                                                      domain = "R-MCPtests"),
                                        parent = child21.group2, style = "Toolbar.TLabelframe",
                                        class = "Desativado"),
            expand = TRUE, fill = "both")
@@ -1254,7 +1254,7 @@ guiMCP <- function(gui = TRUE) {
     tcl(groupmeans, "state", "disabled")
     ## Averages
     tkgrid(label.averages <- tklabel(text = gettext("Averages:",
-                                  domain = "R-MCP"),
+                                  domain = "R-MCPtests"),
                    parent = groupmeans),
            row = 0, column = 0, sticky = "e"
     )
@@ -1266,16 +1266,16 @@ guiMCP <- function(gui = TRUE) {
     )
     ##
     ##
-    tkgrid(bgme1d <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkgrid(bgme1d <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                                parent = groupmeans, borderwidth = 0, image = tclvalue(imageinfo),
                               command = function(...) {
-                                tkmessageBox(message = gettext("Enter the values of the averages. Each mean of the vector must be separated by a comma. For example, for the vector of the average of four treatments: 10, 20, 30, 40. You do not need to use the concatenate function, i.e., c().", domain = "R-MCP"))
+                                tkmessageBox(message = gettext("Enter the values of the averages. Each mean of the vector must be separated by a comma. For example, for the vector of the average of four treatments: 10, 20, 30, 40. You do not need to use the concatenate function, i.e., c().", domain = "R-MCPtests"))
                               }),
            row = 0, column = 2, sticky = "e"
     )
     ##
     ## Treatment
-    tkgrid(la.treat <- tklabel(text = gettext("Treatment:", domain = "R-MCP"),
+    tkgrid(la.treat <- tklabel(text = gettext("Treatment:", domain = "R-MCPtests"),
                    parent = groupmeans),
            row = 1, column = 0, sticky = "e"
     )
@@ -1286,16 +1286,16 @@ guiMCP <- function(gui = TRUE) {
            row = 1, column = 1, sticky = "e", padx = 2
     )
     ##
-    tkgrid(bgme2d <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkgrid(bgme2d <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                                parent = groupmeans, borderwidth = 0, image = tclvalue(imageinfo),
                               command = function(...) {
-                                tkmessageBox(message = gettext("Enter the treatment levels. For example, for a character vector of four treatments: A, B, C, D. You do not need to use the concatenate function, i.e., c(). Nor will you need to use quotes between treatment levels.", domain = "R-MCP"))
+                                tkmessageBox(message = gettext("Enter the treatment levels. For example, for a character vector of four treatments: A, B, C, D. You do not need to use the concatenate function, i.e., c(). Nor will you need to use quotes between treatment levels.", domain = "R-MCPtests"))
                               }),
            row = 1, column = 2, sticky = "e"
     )
     ##
     ## DFerror
-    tkgrid(la.dfe <- tklabel(text = gettext("DFerror:", domain = "R-MCP"),
+    tkgrid(la.dfe <- tklabel(text = gettext("DFerror:", domain = "R-MCPtests"),
                    parent = groupmeans),
            row = 2, column = 0, sticky = "e"
     )
@@ -1306,16 +1306,16 @@ guiMCP <- function(gui = TRUE) {
            row = 2, column = 1, sticky = "e", padx = 2
     )
     ##
-    tkgrid(bgme3d <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkgrid(bgme3d <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                                parent = groupmeans, borderwidth = 0, image = tclvalue(imageinfo),
                               command = function(...) {
-                                tkmessageBox(message = gettext("Enter the value of the degrees of freedom of the mean square error of the experiment model. The value is numeric.", domain = "R-MCP"))
+                                tkmessageBox(message = gettext("Enter the value of the degrees of freedom of the mean square error of the experiment model. The value is numeric.", domain = "R-MCPtests"))
                               }),
            row = 2, column = 2, sticky = "e"
     )
     ##
     ## MSerror
-    tkgrid(la.mse <- tklabel(text = gettext("MSerror:", domain = "R-MCP"),
+    tkgrid(la.mse <- tklabel(text = gettext("MSerror:", domain = "R-MCPtests"),
                    parent = groupmeans),
            row = 3, column = 0, sticky = "e"
     )
@@ -1326,17 +1326,17 @@ guiMCP <- function(gui = TRUE) {
            row = 3, column = 1, sticky = "e", padx = 2
     )
     ##
-    tkgrid(bgme4d <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkgrid(bgme4d <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                                parent = groupmeans, borderwidth = 0, image = tclvalue(imageinfo),
                               command = function(...) {
-                                tkmessageBox(message = gettext("Enter the value of the mean square error of the experiment model. The value is numeric.", domain = "R-MCP"))
+                                tkmessageBox(message = gettext("Enter the value of the mean square error of the experiment model. The value is numeric.", domain = "R-MCPtests"))
                               }),
            row = 3, column = 2, sticky = "e"
     )
     ##
 
     ## Replication
-    tkgrid(la.rep <- tklabel(text = gettext("Replication:", domain = "R-MCP"),
+    tkgrid(la.rep <- tklabel(text = gettext("Replication:", domain = "R-MCPtests"),
                    parent = groupmeans),
            row = 4, column = 0, sticky = "e"
     )
@@ -1347,10 +1347,10 @@ guiMCP <- function(gui = TRUE) {
            row = 4, column = 1, sticky = "e", padx = 2
     )
     ##
-    tkgrid(bgme5d <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkgrid(bgme5d <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                                parent = groupmeans, borderwidth = 0, image = tclvalue(imageinfo),
                               command = function(...) {
-                                tkmessageBox(message = gettext("Enter the value of number of replications of the treatments. The value is numeric and if the data is unbalanced use the harmonic mean of the replications. Inserted all the arguments above, click on the 'Calculate' button", domain = "R-MCP"))
+                                tkmessageBox(message = gettext("Enter the value of number of replications of the treatments. The value is numeric and if the data is unbalanced use the harmonic mean of the replications. Inserted all the arguments above, click on the 'Calculate' button", domain = "R-MCPtests"))
                               }),
            row = 4, column = 2, sticky = "e"
     )
@@ -1360,12 +1360,12 @@ guiMCP <- function(gui = TRUE) {
     # Option 'Graphic Parameters'
     ###############################
     tkpack(frame.plot <- ttklabelframe(text = gettext("Graphic Parameters",
-                                                      domain = "R-MCP"),
+                                                      domain = "R-MCPtests"),
                                        parent = child21.group2, style = "Toolbar.TLabelframe"),
            expand = TRUE, fill = "both"
     )
     ## Color
-    tkgrid(tklabel(text = gettext("Color:", domain = "R-MCP"),
+    tkgrid(tklabel(text = gettext("Color:", domain = "R-MCPtests"),
                    parent = frame.plot),
            row = 0, column = 0, sticky = "e", pady = 3
     )
@@ -1376,17 +1376,17 @@ guiMCP <- function(gui = TRUE) {
            row = 0, column = 1, sticky = "e", padx = 2
     )
     ##
-    tkgrid(bgraf1d <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkgrid(bgraf1d <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                                 parent = frame.plot, borderwidth = 0, image = tclvalue(imageinfo),
                                command = function(...) {
-                                 tkmessageBox(message = gettext("Enter the color name of the chart bars. Place quotation marks around the color names. For example, if you want the color red for the bars, use 'red'. For functions, quotation marks are not necessary, for example gray.colors() function.", domain = "R-MCP"))
+                                 tkmessageBox(message = gettext("Enter the color name of the chart bars. Place quotation marks around the color names. For example, if you want the color red for the bars, use 'red'. For functions, quotation marks are not necessary, for example gray.colors() function.", domain = "R-MCPtests"))
                                }),
            row = 0, column = 2, sticky = "e"
     )
     ##
 
     ## Horizontal
-    tkgrid(tklabel(text = gettext("Horizontal:", domain = "R-MCP"),
+    tkgrid(tklabel(text = gettext("Horizontal:", domain = "R-MCPtests"),
                    parent = frame.plot),
            row = 1, column = 0, sticky = "e", pady = 3
     )
@@ -1397,16 +1397,16 @@ guiMCP <- function(gui = TRUE) {
            row = 1, column = 1, sticky = "e", padx = 2
     )
     ##
-    tkgrid(bgraf2d <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkgrid(bgraf2d <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                                 parent = frame.plot, borderwidth = 0, image = tclvalue(imageinfo),
                                command = function(...) {
-                                 tkmessageBox(message = gettext("Choose horizontal or vertical bars (FALSE or TRUE).", domain = "R-MCP"))
+                                 tkmessageBox(message = gettext("Choose horizontal or vertical bars (FALSE or TRUE).", domain = "R-MCPtests"))
                                }),
            row = 1, column = 2, sticky = "e"
     )
     ##
     ## Axes
-    tkgrid(tklabel(text = gettext("Axes:", domain = "R-MCP"),
+    tkgrid(tklabel(text = gettext("Axes:", domain = "R-MCPtests"),
                    parent = frame.plot),
            row = 2, column = 0, sticky = "e", pady = 3
     )
@@ -1417,23 +1417,23 @@ guiMCP <- function(gui = TRUE) {
            row = 2, column = 1, sticky = "e", padx = 2
     )
     ##
-    tkgrid(bgraf3d <- tkbutton(text = gettext("help", domain = "R-MCP"),
+    tkgrid(bgraf3d <- tkbutton(text = gettext("help", domain = "R-MCPtests"),
                                 parent = frame.plot, borderwidth = 0, image = tclvalue(imageinfo),
                                command = function(...) {
-                                 tkmessageBox(message = gettext("Enter the axes. Separate them by semicolons. To add the names on the X and Y axes: xlab = 'Label X-axix'; ylab = 'Label Y-axis'.", domain = "R-MCP"))
+                                 tkmessageBox(message = gettext("Enter the axes. Separate them by semicolons. To add the names on the X and Y axes: xlab = 'Label X-axix'; ylab = 'Label Y-axis'.", domain = "R-MCPtests"))
                                }),
            row = 2, column = 2, sticky = "e"
     )
     ##
     ## Plot button
     updateplot <- function(...) {
-      if (tclvalue(vari3) == gettext("Model", domain = "R-MCP")) {
-        objtreat <- as.factor(dat[,tclvalue(vari6)])
+      if (tclvalue(vari3) == gettext("Model", domain = "R-MCPtests")) {
+        objtreat <- as.factor(envMCP$dat[,tclvalue(vari6)])
       }
-      if (tclvalue(vari3) == gettext("Response variable", domain = "R-MCP")) {
-        objtreat <- as.factor(dat[,tclvalue(vari8)])
+      if (tclvalue(vari3) == gettext("Response variable", domain = "R-MCPtests")) {
+        objtreat <- as.factor(envMCP$dat[,tclvalue(vari8)])
       }
-      if (tclvalue(vari3) == gettext("Averages", domain = "R-MCP")) {
+      if (tclvalue(vari3) == gettext("Averages", domain = "R-MCPtests")) {
         trat <- strsplit(tclvalue(vari12), split = ",", perl = TRUE)[[1]]
         trat <- as.factor(trat)
         objtreat <- trat
@@ -1479,7 +1479,7 @@ guiMCP <- function(gui = TRUE) {
       ##
       plottopwinMCP <- tkplot(parent = frameplot,
                               function(...) {
-                                MCPtests::MCPbarplot(results, col = color, horiz = hor, xlab = xlab, ylab = ylab)
+                                MCPtests::MCPbarplot(envMCP$results, col = color, horiz = hor, xlab = xlab, ylab = ylab)
                               }, hscale = fator, vscale = fator)
       # Auxiliar function
       f <- function(...) {
@@ -1492,20 +1492,20 @@ guiMCP <- function(gui = TRUE) {
       # Button save as...
       #graphics.off() # Erasing All Graphics Devices
       dispplot <- NULL
-      bsaveas <- tkbutton(parent = framelabelaux, text = gettext("Save as...", domain = "R-MCP"),
+      bsaveas <- tkbutton(parent = framelabelaux, text = gettext("Save as...", domain = "R-MCPtests"),
                           borderwidth = 0, underline = 0,
                           image = tclvalue(imagesaveas), compound = "top",
                           command = function(...){
                             dispplot <<- grDevices::dev.new(noRStudioGD = TRUE) # New device plot
                             #grDevices::dev.new(noRStudioGD = TRUE) # New device plot
-                            if (tclvalue(vari3) == gettext("Model", domain = "R-MCP")) {
-                              objtreat <- as.factor(dat[,tclvalue(vari6)])
+                            if (tclvalue(vari3) == gettext("Model", domain = "R-MCPtests")) {
+                              objtreat <- as.factor(envMCP$dat[,tclvalue(vari6)])
                             }
-                            if (tclvalue(vari3) == gettext("Response variable", domain = "R-MCP")) {
-                              objtreat <- as.factor(dat[,tclvalue(vari8)])
+                            if (tclvalue(vari3) == gettext("Response variable", domain = "R-MCPtests")) {
+                              objtreat <- as.factor(envMCP$dat[,tclvalue(vari8)])
                             }
 
-                            if (tclvalue(vari3) == gettext("Averages", domain = "R-MCP")) {
+                            if (tclvalue(vari3) == gettext("Averages", domain = "R-MCPtests")) {
                               # Treatment levels
                               trat <- strsplit(tclvalue(vari12), split = ",", perl = TRUE)[[1]]
                               trat <- as.factor(trat)
@@ -1528,7 +1528,7 @@ guiMCP <- function(gui = TRUE) {
                                 color <- eval(parse(text = tclvalue(vari16)))
                               }
                             }
-                            MCPtests::MCPbarplot(results, col = color, horiz = hor, xlab = xlab, ylab = ylab)
+                            MCPtests::MCPbarplot(envMCP$results, col = color, horiz = hor, xlab = xlab, ylab = ylab)
                           })
       tkpack(bsaveas, side = "left")
 
@@ -1537,7 +1537,7 @@ guiMCP <- function(gui = TRUE) {
                                         padding = c(3,3,3,3)),
              side = "top", fill = "x", expand = TRUE)
       #Label
-      scalelabel <- tklabel(parent = framelabelaux2, text = gettext("Scale of Plot", domain = "R-MCP"))
+      scalelabel <- tklabel(parent = framelabelaux2, text = gettext("Scale of Plot", domain = "R-MCPtests"))
       # Scale of plot
       s <- tkscale(framelabelaux2, command = f, from = 1, to = 3.00, variable = "fator",
                    showvalue = TRUE, resolution = 0.05, orient = "horiz", borderwidth = 0)
@@ -1555,7 +1555,7 @@ guiMCP <- function(gui = TRUE) {
       addScrollbars(frameplot, plottopwinMCP)
     }
     tkpack(plot_button <- ttkbutton(text = gettext("Update plot",
-                                                   domain = "R-MCP"),
+                                                   domain = "R-MCPtests"),
                                     parent = child21.group2,
                                     command = updateplot),
            side = "bottom",
@@ -1569,7 +1569,7 @@ guiMCP <- function(gui = TRUE) {
     # Working Q4
     ############
     tkpack(frame.graf <- ttklabelframe(text = gettext("Plot",
-                                                      domain = "R-MCP"),
+                                                      domain = "R-MCPtests"),
                                        parent = child22.group2,
                                        style = "Toolbar.TLabelframe"
                                        ),
@@ -1578,7 +1578,7 @@ guiMCP <- function(gui = TRUE) {
     tkpack(tklabel(parent = frame.graf, image = "::image::MCP2"),
            expand = TRUE, fill = "both")
     tkpack(tklabel(parent = frame.graf, foreground = "blue",
-                   text = gettext("Democratizing statistical knowledge to the world!", domain = "R-MCP")),
+                   text = gettext("Democratizing statistical knowledge to the world!", domain = "R-MCPtests")),
            side = "bottom", anchor = "center"
            )
 
@@ -1592,21 +1592,9 @@ guiMCP <- function(gui = TRUE) {
     # Mensagem de protecao para nao fechar o programa por engano
     tkwm.protocol(topwinMCP, "WM_DELETE_WINDOW", function(){
       response <- tkmessageBox(icon = "question",
-                               message = gettext("Really close?", domain = "R-MCP"),
+                               message = gettext("Really close?", domain = "R-MCPtests"),
                                type = "yesno" ,
                                parent = topwinMCP)
-      if (as.character(response) == "yes") {
-        pcreatobj <- c('brow', 'dat2', 'dat', 'results')
-        if (any(ls(.GlobalEnv) == "dat")) {
-          for (i in pcreatobj) {
-            if (!any(ls(.GlobalEnv) == i)) pcreatobj <- pcreatobj[-which(pcreatobj == i)]
-          }
-          rm(list = c(pcreatobj), envir = .GlobalEnv)
-        }
-        }
-      if (as.character(response) == "no") {
-        return()
-      }
       tkdestroy(topwinMCP) # Caso contrario feche
     }
     )
@@ -1615,8 +1603,8 @@ guiMCP <- function(gui = TRUE) {
   }
   if (gui == FALSE) {
     response <- tk_messageBox(
-      title = gettext("Tell me something:", domain = "R-MCP"),
-      message = gettext("Do you want to use the GUI for the package?", domain = "R-MCP"),
+      title = gettext("Tell me something:", domain = "R-MCPtests"),
+      message = gettext("Do you want to use the GUI for the package?", domain = "R-MCPtests"),
       icon = "question",
       type = "yesno"
     )
@@ -1624,7 +1612,7 @@ guiMCP <- function(gui = TRUE) {
       guiMCP(gui = TRUE)
     }
     if (response == "no") {
-      tk_messageBox(message = gettext("Use the MRtest function! For help, use ?MRtest", domain = "R-MCP"))
+      tk_messageBox(message = gettext("Use the MRtest function! For help, use ?MRtest", domain = "R-MCPtests"))
       ?MCPtests::MCPtest
     }
 

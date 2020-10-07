@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: MCP 1.0\n"
+"Project-Id-Version: MCPtests 1.0\n"
 "POT-Creation-Date: 2020-07-07 07:25\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"

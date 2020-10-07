@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: midrangeMCP 2.1\n"
+"Project-Id-Version: MCPtests 1.0\n"
 "Report-Msgid-Bugs-To: ben.deivide@ufsj.edu.br\n"
 "POT-Creation-Date: 2020-04-13 14:03\n"
 "PO-Revision-Date: 2020-04-13 \n"

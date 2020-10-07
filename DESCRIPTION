@@ -17,6 +17,7 @@ Description: Performs the execution of the main procedures of multiple
     assist the user in making the decision for the chosen test.
 Imports:
         stats,
+        base,
         utils,
         graphics,
         grDevices,

@@ -26,9 +26,6 @@
 #' @param parallel Logic. If \code{FALSE} (default), the \code{MCPtest} function
 #' runs without parallelization. Otherwise, the code is executed with
 #' parallelization. Note that the parallelization is not always more efficient.
-#  @param console Logic. If \code{TRUE} (default), the \code{MCPtest} function
-#  prints the results on the console even though the results are stored in an
-#  object. If \code{FALSE}, otherside.
 #' @return \code{MCPtest} returns the print of a list of results. First,
 #'     the summary of \code{y}. Second, the statistics
 #'     of the test chosen. And finally, the  mean group results for each test.
@@ -138,8 +135,7 @@
 # @importFrom "doParallel" "registerDoParallel"
 #' @export
 MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication = NULL, alpha = 0.05, main = NULL,
-                   MCP = "all", ismean = FALSE, parallel = FALSE,
-                   console = TRUE){
+                   MCP = "all", ismean = FALSE, parallel = FALSE){
   #####################################################
   #Defensive programming
   if (ismean == TRUE) {
