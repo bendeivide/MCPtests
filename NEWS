@@ -1,3 +1,8 @@
+Version 1.0.1
+-------------
+- Bug partially fixed on the tkrplot package. We changed this package from the Imports field to Suggests in DESCRIPTION. But, this needs to be improved.
+
+
 Version 1.0
 -----------
 - In the first version, we created the basic functions of the MCP package:

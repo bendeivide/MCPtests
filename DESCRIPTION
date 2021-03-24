@@ -1,8 +1,7 @@
 Package: MCPtests
 Type: Package
 Title: Multiples Comparisons Procedures
-Version: 1.0
-Date: 2020-10-07
+Version: 1.0.1
 Authors@R: c(
     person("Ben", "Deivide", email = "ben.deivide@ufsj.edu.br", role = c("aut", "cre")),
     person("Daniel", "Furtado", email = "danielff@dex.ufla.br", role = "aut"),
@@ -25,10 +24,11 @@ Imports:
         writexl,
         xtable,
         tcltk,
-        tkrplot,
         foreach,
         doParallel,
         parallel
+Suggests: 
+        tkrplot
 License: GPL (>= 2)
 LazyData: TRUE
 RoxygenNote: 7.1.1
