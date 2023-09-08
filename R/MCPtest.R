@@ -485,7 +485,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
   }
 
   # Calinski-Corsten's test
-  if (any(MCP == "SK")) {
+  if (any(MCP == "CC")) {
     #if (console) cat(gettext("\nCalinski-Corsten's Test\n\n", domain = "R-MCP"))
     statistics <- data.frame(Exp.Mean = Mean,
                              CV      = CV,
@@ -504,7 +504,8 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
     statistics.CC <- statistics
     #if (console) print(statistics)
 
-    test <- calinski_corsten_f(y, trt, dferror, mserror, rh, alpha, parallel)
+    # test <- calinski_corsten_f(y, trt, dferror, mserror, rh, alpha, parallel)
+    test <- calinski_corsten_f(y, trt, dferror, mserror, rh, alpha)
     test.CC <- test
     #if (console) cat(gettext("\nGroups: \n", domain = "R-MCP"))
     #if (console) print(test)
@@ -529,11 +530,11 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
   # Output results
   ################
 
-  alltest    <- 1:5
+  alltest    <- 1:length(mcps)
   nas        <- nas[order(nas, na.last = NA)]
   ntest      <- alltest[-nas]
 
-  if (length(nas) == 5) {
+  if (length(nas) == length(mcps)) {
     statistics <- stat.tests
     grouptest  <- group.tests
   } else {
