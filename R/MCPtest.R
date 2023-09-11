@@ -162,17 +162,17 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
   }
   #####################################################
   if (all(MCP == "all")){
-    MCP = c("MGM", "MGR", "SNKM", "TM", "SK", "CC")  # FAZER ALTERACOES
+    MCP = c("MGM", "MGR", "SNKM", "TM", "SK", "CC", "CCR")  # FAZER ALTERACOES
   }
   #####################################################
   #Defensive programming
   if (is.null(trt)) {
     stop("The trt argument is required", call. = FALSE)
   }
-  mcps <- c("MGM", "MGR", "SNKM", "TM", "SK", "CC") # FAZER ALTERACOES
+  mcps <- c("MGM", "MGR", "SNKM", "TM", "SK", "CC", "CCR") # FAZER ALTERACOES
   nas  <- pmatch(MCP, mcps)
   if (any(is.na(nas))) {
-    stop("The options for the MCP argument are 'MGM', 'MGR', 'SNKM', 'TM', 'SK' and 'CC'", call. = FALSE) # FAZER ALTERACOES
+    stop("The options for the MCP argument are 'MGM', 'MGR', 'SNKM', 'TM', 'SK', 'CC' and 'CCR'", call. = FALSE) # FAZER ALTERACOES
   }
   ################################################
   name.y   <- paste(deparse(substitute(y)))
@@ -317,6 +317,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
   statistics.TM   <- NA
   statistics.SK   <- NA
   statistics.CC   <- NA
+  statistics.CCR  <- NA
 
   #Initial groups:
   test.MGM  <- NA
@@ -325,6 +326,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
   test.TM   <- NA
   test.SK   <- NA
   test.CC   <- NA
+  test.CCR  <- NA
 
   #Defensive programming
   if (!any(parallel == c(TRUE,FALSE))) {
@@ -511,13 +513,41 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
     #if (console) print(test)
   }
 
+  # Calinski-Corsten Range test
+  if (any(MCP == "CCR")) {
+    #if (console) cat(gettext("\nCalinski-Corsten Range Test\n\n", domain = "R-MCP"))
+    statistics <- data.frame(Exp.Mean = Mean,
+                             CV      = CV,
+                             MSerror = mserror,
+                             DF      = dferror,
+                             n       = n
+    )
+    #if (console) cat(gettext("Statistics: \n", domain = "R-MCP"))
+    rownames(statistics) <- " "
+    colnames(statistics) <- c(gettext("Exp.Mean", domain = "R-MCP"),
+                              "CV",
+                              gettext("MSerror", domain = "R-MCP"),
+                              gettext("DF", domain = "R-MCP"),
+                              "n"
+    )
+    statistics.CCR <- statistics
+    #if (console) print(statistics)
+
+    test <- calinski_corsten_range(y, trt, dferror, mserror, rh, alpha)
+    test.CCR <- test
+    #if (console) cat(gettext("\nGroups: \n", domain = "R-MCP"))
+    #if (console) print(test)
+  }
+
   #All statistics
   stat.tests <- list(Statistics.MGM  = statistics.MGM,
                      Statistics.MGR  = statistics.MGR,
                      Statistics.SNKM = statistics.SNKM,
                      Statistics.TM   = statistics.TM,
                      Statistics.SK   = statistics.SK,
-                     Statistics.CC   = statistics.CC)
+                     Statistics.CC   = statistics.CC,
+                     Statistics.CCR  = statistics.CCR
+                     )
 
   #All groups
   group.tests <- list(group.MGM  = test.MGM,
@@ -525,7 +555,9 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
                       group.SNKM = test.SNKM,
                       group.TM   = test.TM,
                       group.SK   = test.SK,
-                      group.CC   = test.CC)
+                      group.CC   = test.CC,
+                      group.CCR  = test.CCR
+                      )
   ################
   # Output results
   ################
