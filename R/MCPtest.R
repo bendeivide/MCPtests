@@ -162,17 +162,17 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
   }
   #####################################################
   if (all(MCP == "all")){
-    MCP = c("MGM", "MGR", "SNKM", "TM", "SK", "CC", "CCR", "RV", "RF")  # FAZER ALTERACOES
+    MCP = c("MGM", "MGR", "SNKM", "TM", "SK", "CC", "CCR", "RV", "RF", "SKB")  # FAZER ALTERACOES
   }
   #####################################################
   #Defensive programming
   if (is.null(trt)) {
     stop("The trt argument is required", call. = FALSE)
   }
-  mcps <- c("MGM", "MGR", "SNKM", "TM", "SK", "CC", "CCR", "RV", "RF") # FAZER ALTERACOES
+  mcps <- c("MGM", "MGR", "SNKM", "TM", "SK", "CC", "CCR", "RV", "RF", "SKB") # FAZER ALTERACOES
   nas  <- pmatch(MCP, mcps)
   if (any(is.na(nas))) {
-    stop("The options for the MCP argument are 'MGM', 'MGR', 'SNKM', 'TM', 'SK', 'CC', 'CCR', 'RV' and 'RF'", call. = FALSE) # FAZER ALTERACOES
+    stop("The options for the MCP argument are 'MGM', 'MGR', 'SNKM', 'TM', 'SK', 'CC', 'CCR', 'RV', 'RF' and 'SKB'", call. = FALSE) # FAZER ALTERACOES
   }
   ################################################
   name.y   <- paste(deparse(substitute(y)))
@@ -320,6 +320,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
   statistics.CCR  <- NA
   statistics.RV   <- NA
   statistics.RF   <- NA
+  statistics.SKB  <- NA
 
   #Initial groups:
   test.MGM  <- NA
@@ -331,6 +332,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
   test.CCR  <- NA
   test.RV   <- NA
   test.RF   <- NA
+  test.SKB  <- NA
 
   #Defensive programming
   if (!any(parallel == c(TRUE,FALSE))) {
@@ -595,6 +597,32 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
     #if (console) print(test)
   }
 
+  # Scott-Knott-Bhering.etal.'s test
+  if (any(MCP == "SKB")) {
+    #if (console) cat(gettext("\nScott-Knott's Test (SCOTT-KNOTT, 1974)\n\n", domain = "R-MCP"))
+    statistics <- data.frame(Exp.Mean = Mean,
+                             CV      = CV,
+                             MSerror = mserror,
+                             DF      = dferror,
+                             n       = n
+    )
+    #if (console) cat(gettext("Statistics: \n", domain = "R-MCP"))
+    rownames(statistics) <- " "
+    colnames(statistics) <- c(gettext("Exp.Mean", domain = "R-MCP"),
+                              "CV",
+                              gettext("MSerror", domain = "R-MCP"),
+                              gettext("DF", domain = "R-MCP"),
+                              "n"
+    )
+    statistics.SKB <- statistics
+    #if (console) print(statistics)
+
+    test <- sktest_bhering2008(y, trt, dferror, mserror, rh, alpha)
+    test.SKB <- test
+    #if (console) cat(gettext("\nGroups: \n", domain = "R-MCP"))
+    #if (console) print(test)
+  }
+
   #All statistics
   stat.tests <- list(Statistics.MGM  = statistics.MGM,
                      Statistics.MGR  = statistics.MGR,
@@ -604,7 +632,8 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
                      Statistics.CC   = statistics.CC,
                      Statistics.CCR  = statistics.CCR,
                      Statistics.RV  = statistics.RV,
-                     Statistics.RF  = statistics.RF
+                     Statistics.RF  = statistics.RF,
+                     Statistics.SKB  = statistics.SKB
                      )
 
   #All groups
@@ -616,7 +645,8 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
                       group.CC   = test.CC,
                       group.CCR  = test.CCR,
                       group.RV  = test.RV,
-                      group.RF  = test.RF
+                      group.RF  = test.RF,
+                      group.SKB  = test.SKB
                       )
   ################
   # Output results
