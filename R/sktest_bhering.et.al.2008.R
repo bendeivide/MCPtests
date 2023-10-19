@@ -68,6 +68,16 @@ sktest_bhering2008 <- function(y, trt, dferror, mserror, replication, alpha) {
   # Results of Scott-Knott's test
   groups <- rep(0, times = length(Ybar))
 
+  # Temporary files
+  pvalueext <- tempfile(pattern = "pvalues.", tmpdir = tempdir())
+  breakgroupsext <- tempfile(pattern = "breakgroups.", tmpdir = tempdir())
+  maxboext <- tempfile(pattern = "maxbo.", tmpdir = tempdir())
+  s2ext <- tempfile(pattern = "s2.", tmpdir = tempdir())
+  nutestext <- tempfile(pattern = "nutest.", tmpdir = tempdir())
+  stattestext <- tempfile(pattern = "stattest.", tmpdir = tempdir())
+  resultsext <- tempfile(pattern = "results.", tmpdir = tempdir())
+  g2ext <- tempfile(pattern = "g2.", tmpdir = tempdir())
+
 
   # Function for the separation of the groups
   sg <- function(means, ...) {
@@ -109,12 +119,12 @@ sktest_bhering2008 <- function(y, trt, dferror, mserror, replication, alpha) {
     if (pvalue > alpha) {
       # Condition for pvalue > alpha
       # Classification of Scott-Knott's test
-      cat(pvalue,"\n", file = "pvalues", append = TRUE)
-      cat(substr(names(g1), 1, 3), "_vs_", substr(names(g2), 1, 3), ";", "\n", sep = " ", file = "breakgroups", append = TRUE)
-      cat(max(b0),"\n", file = "maxbo", append = TRUE)
-      cat(sig2,"\n", file = "s2", append = TRUE)
-      cat(nu,"\n", file = "nutest", append = TRUE)
-      cat(ts,"\n", file = "stattest", append = TRUE)
+      cat(pvalue,"\n", file = pvalueext, append = TRUE)
+      cat(substr(names(g1), 1, 3), "_vs_", substr(names(g2), 1, 3), ";", "\n", sep = " ", file = breakgroupsext, append = TRUE)
+      cat(max(b0),"\n", file = maxboext, append = TRUE)
+      cat(sig2,"\n", file = s2ext, append = TRUE)
+      cat(nu,"\n", file = nutestext, append = TRUE)
+      cat(ts,"\n", file = stattestext, append = TRUE)
 
       # for (i in 1:length(c(g1, g2))) {
       #   cat(names(c(g1, g2)[i]),"\n", file = "results",append = TRUE)
@@ -128,7 +138,7 @@ sktest_bhering2008 <- function(y, trt, dferror, mserror, replication, alpha) {
         file.remove("g2")
         if (length(g1) > 1) sg(g1)
         if (length(g1) == 1) {
-          cat(names(g1),"\n", file = "results",append = TRUE)
+          cat(names(g1),"\n", file = resultsext,append = TRUE)
         }
       }
     }
@@ -136,27 +146,27 @@ sktest_bhering2008 <- function(y, trt, dferror, mserror, replication, alpha) {
     if (pvalue <= alpha) {
       # Classification of Scott-Knott's test
       for (i in 1:length(g1)) {
-        cat(names(g1[i]),"\n", file = "results",append = TRUE)
+        cat(names(g1[i]),"\n", file = resultsext,append = TRUE)
       }
-      cat("*","\n", file = "results", append = TRUE)
+      cat("*","\n", file = resultsext, append = TRUE)
       # Auxiliar results
-      cat(pvalue,"\n", file = "pvalues", append = TRUE)
-      cat(substr(names(g1), 1, 3), "_vs_", substr(names(g2), 1, 3), ";", "\n", sep = " ", file = "breakgroups", append = TRUE)
-      cat(max(b0),"\n", file = "maxbo", append = TRUE)
-      cat(sig2,"\n", file = "s2", append = TRUE)
-      cat(nu,"\n", file = "nutest", append = TRUE)
-      cat(ts,"\n", file = "stattest", append = TRUE)
+      cat(pvalue,"\n", file = pvalueext, append = TRUE)
+      cat(substr(names(g1), 1, 3), "_vs_", substr(names(g2), 1, 3), ";", "\n", sep = " ", file = breakgroupsext, append = TRUE)
+      cat(max(b0),"\n", file = maxboext, append = TRUE)
+      cat(sig2,"\n", file = s2ext, append = TRUE)
+      cat(nu,"\n", file = nutestext, append = TRUE)
+      cat(ts,"\n", file = stattestext, append = TRUE)
       if (length(g2) > 1) {
         for (i in 1:length(g2)) {
-          cat(g2[i],"\n", file = "g2", append = TRUE)
+          cat(g2[i],"\n", file = g2ext, append = TRUE)
         }
-      } else cat(g2,"\n", file = "g2", append = TRUE)
+      } else cat(g2,"\n", file = g2ext, append = TRUE)
       # Test into test
       if (length(g1) == 1) {
-        g1 <- as.vector(read.table("g2")[[1]])
-        file.remove("g2")
+        g1 <- as.vector(read.table(g2ext)[[1]])
+        file.remove(g2ext)
       }
-      if (length(g1) > 1) sg(g1)
+      if (length(g1) > 1) Recall(g1)
     }
   }
 
@@ -164,14 +174,14 @@ sktest_bhering2008 <- function(y, trt, dferror, mserror, replication, alpha) {
   sg(Ybar)
 
   # Result of Scott-Knott's test
-  if (file.exists("results") == FALSE) {
+  if (file.exists(resultsext) == FALSE) {
     stop("Missing data entry!", call. = FALSE)
   }
   else{
     # Loading external file of results
-    xx <- read.table("results")
+    xx <- read.table(resultsext)
     # Remove external file
-    file.remove("results")
+    file.remove(resultsext)
     x <- as.vector(xx[[1]])
     z <- 1
 
@@ -190,23 +200,28 @@ sktest_bhering2008 <- function(y, trt, dferror, mserror, replication, alpha) {
   stopCluster(cl)
 
   # Complete results
-  breakgroups <- as.vector(read.table("breakgroups", header = FALSE, sep = ";")[,1])
-  Bo <- round(as.vector(read.table("maxbo", header = FALSE)), 5)
-  S2 <- round(as.vector(read.table("s2", header = FALSE)), 5)
-  nutest <- round(as.vector(read.table("nutest", header = FALSE)), 5)
-  stattest <- round(as.vector(read.table("stattest", header = FALSE)), 5)
-  pvalues <- round(as.vector(read.table("pvalues", header = FALSE)), 5)
+  breakgroups <- as.vector(read.table(breakgroupsext, header = FALSE, sep = ";")[,1])
+  Bo <- round(as.vector(read.table(maxboext, header = FALSE)[,1]), 5)
+  S2 <- round(as.vector(read.table(s2ext, header = FALSE)[,1]), 5)
+  nutest <- round(as.vector(read.table(nutestext, header = FALSE)[,1]), 5)
+  stattest <- round(as.vector(read.table(stattestext, header = FALSE)[,1]), 5)
+  pvalues <- round(as.vector(read.table(pvalueext, header = FALSE)[,1]), 5)
   # Remove files
-  file.remove(c("breakgroups", "maxbo", "s2", "nutest", "stattest", "pvalues"))
+  file.remove(c(breakgroupsext, maxboext, s2ext, nutestext, stattestext, pvalueext))
 
   # Details of the results (invible)
   detres <- data.frame(Groups = breakgroups,
-                         Bo = Bo,
-                         Variance = S2,
-                         DF = nutest,
-                         Test = stattest,
-                         "P-value" = pvalues)
-  colnames(detres) <- c("Groups", "Bo", "Variance", "DF", "Test", "P-value")
+                       Bo = Bo,
+                       Variance = S2,
+                       DF = nutest,
+                       Test = stattest,
+                       "P-value" = pvalues)
+  colnames(detres) <- c(gettext("Groups", domain = "R-MCP"),
+                        "Bo",
+                        gettext("Variance", domain = "R-MCP"),
+                        gettext("DF", domain = "R-MCP"),
+                        gettext("Test", domain = "R-MCP"),
+                        gettext("P-value", domain = "R-MCP"))
 
   # Simple results
   result <- cbind(Ybar, groups)
