@@ -102,7 +102,7 @@ sktest_bhering2008 <- function(y, trt, dferror, mserror, replication, alpha) {
     g2 <- means[(corte + 1):length(means)]
     tg <- c(g1,g2)
 
-    # Calculate ML estimate of sigma²
+    # Calculate ML estimate of sigma^2
     sig2 <- (1 / (length(tg) + dferror)) * (sum(tg^2) - (sum(tg))^2 / length(tg) + dferror * mserror / replication)
 
     # Test statistic

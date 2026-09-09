@@ -3,12 +3,12 @@
 #                              on the F distribution.[ARTICLE].2014
 
 # Exemplo do Caliski & Corsten
-y <- Ybar <- c(97.7, 100.7, 111.3, 120.7, 124.3,
-          128.7, 129.0, 131.0, 132, 141.7,
-          150.7, 152.7, 176)
-trt <- as.factor(1:13)
-#length(trt)
-mserror <- 124.29; dferror = 24; replication = 3
+# y <- Ybar <- c(97.7, 100.7, 111.3, 120.7, 124.3,
+#           128.7, 129.0, 131.0, 132, 141.7,
+#           150.7, 152.7, 176)
+# trt <- as.factor(1:13)
+# #length(trt)
+# mserror <- 124.29; dferror = 24; replication = 3
 
 
 calinski_corsten_f <- function(y, trt, dferror, mserror, replication, alpha) {

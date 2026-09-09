@@ -17,7 +17,7 @@ A list with 4 variables:
 }
 }
 \usage{
-ex1ScottKnott
+data(ex1ScottKnott)
 }
 \description{
 Set of results presented by Duncan (1955), in which Scott-Knott (1974)

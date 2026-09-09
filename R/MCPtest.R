@@ -19,7 +19,10 @@
 #'     the \emph{defaut} is "all". This option will go perform all tests.
 #'     However, the options are: the Skott-Knott midrange test ("MGM"),
 #'     the Skott-Knott Range test ("MGR"), the Tukey midrange test ("TM"),
-#'     the Scott-Knott's test ("SK").
+#'     the Scott-Knott's test ("SK"), the Calinski-Corsten test based on
+#'     F distribution ("CC"), the Calinski-Corsten test based on
+#'     Range distribution ("CCR"), the Ramos-Vieira test ("RV"),
+#'     the Ramos-Ferreira test ("RF"), the Scott-Knott-Bhering test ("SKB").
 #' @param ismean Logic. If \code{FALSE} (default), the \code{y} argument represents
 #' a model (aov or lm) or a numeric vector containing the response variable.
 #' If \code{TRUE} the \code{y} argument represents the mean of treatments.
@@ -33,8 +36,9 @@
 #'     in an object, the results will be printed and
 #'     also stored in the object.
 #' @details The \code{MCP} argument allows you to choose various tests
-#'     of multiple comparisons at once. For example,
-#'     \code{MCP = c("MGM", "MGR")}, and so on.
+#'     of multiple comparisons at once. Options: \code{MGM}, \code{MGR},
+#'     \code{"SNKM"}, \code{"TM"}, \code{"SK"}, \code{"CC"}, \code{"CCR"},
+#'     \code{"RV"}, \code{"RF"}, \code{"SKB"}.
 #' @references
 #' BATISTA, Ben Deivide de Oliveira. Testes de comparacoes multiplas
 #'     baseados na distribuicao da \emph{midrange} \emph{estudentizada}

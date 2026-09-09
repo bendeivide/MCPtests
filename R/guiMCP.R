@@ -741,7 +741,7 @@ guiMCP <- function(gui = TRUE) {
                               borderwidth = 0, underline = 0,
                               image = tclvalue(imagesaveas), compound = "top",
                               command = function(...){
-                                dispplot <<- grDevices::dev.new(noRStudioGD = TRUE) # New device plot
+                                #dispplot <<- grDevices::dev.new(noRStudioGD = TRUE) # New device plot
                                 #grDevices::dev.new(noRStudioGD = TRUE) # New device plot
                                 if (tclvalue(vari3) == gettext("Model", domain = "R-MCPtests")) {
                                   objtreat <- as.factor(envMCP$dat[,tclvalue(vari6)])
@@ -772,7 +772,8 @@ guiMCP <- function(gui = TRUE) {
                                     color <- eval(parse(text = tclvalue(vari16)))
                                   }
                                 }
-                                MCPtests::MCPbarplot(envMCP$results, col = color, horiz = hor, xlab = xlab, ylab = ylab)
+                                #MCPtests::MCPbarplot(envMCP$results, col = color, horiz = hor, xlab = xlab, ylab = ylab)
+                                tkplotMCP(envMCP$results, col = color, horiz = hor, xlab = xlab, ylab = ylab)
                               })
           tkpack(bsaveas, side = "left")
 
