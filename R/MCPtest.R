@@ -166,17 +166,18 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
   }
   #####################################################
   if (all(MCP == "all")){
-    MCP = c("MGM", "MGR", "SNKM", "TM", "SK", "CC", "CCR", "RV", "RF", "SKB")  # FAZER ALTERACOES
+    MCP = c("MGM", "MGR", "SNKM", "TM", "SK", "CC", "CCR", "RV", "RF", "SKB", "tukey")  # FAZER ALTERACOES
   }
   #####################################################
   #Defensive programming
   if (is.null(trt)) {
     stop("The trt argument is required", call. = FALSE)
   }
-  mcps <- c("MGM", "MGR", "SNKM", "TM", "SK", "CC", "CCR", "RV", "RF", "SKB") # FAZER ALTERACOES
+  mcps <- c("MGM", "MGR", "SNKM", "TM", "SK", "CC", "CCR", "RV", "RF", "SKB", "tukey") # FAZER ALTERACOES
   nas  <- pmatch(MCP, mcps)
   if (any(is.na(nas))) {
-    stop("The options for the MCP argument are 'MGM', 'MGR', 'SNKM', 'TM', 'SK', 'CC', 'CCR', 'RV', 'RF' and 'SKB'", call. = FALSE) # FAZER ALTERACOES
+    stop("The options for the MCP argument are 'MGM', 'MGR', 'SNKM', 'TM',
+         'SK', 'CC', 'CCR', 'RV', 'RF' and 'SKB', 'tukey' ", call. = FALSE) # FAZER ALTERACOES
   }
   ################################################
   name.y   <- paste(deparse(substitute(y)))
@@ -258,14 +259,6 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
     CV         <- sqrt(mserror) * 100/Mean
   }
 
-
-  ################################################
-  #Observation for unbalanced data
-  if (length(unique(rn)) != 1) {
-    #if (console) cat(gettext("Unbalanced data: It will be used the harmonic mean of \n the number of experiment replicates \n", domain = "R-MCP"))
-  }
-  ################################################
-
   if (ismean == TRUE) {
     summarydata <- data.frame(Means  = means,
                               r      = rh)
@@ -288,10 +281,6 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
     #if (console) print(summarydata)
   }
 
-  if (length(unique(rn)) != 1) {
-    #if (console) cat(gettext("\n Harmonic mean of the number of experiment replicates",
-    #            domain = "R-MCP"), rh, "\n")
-  }
   #DMS midrange
   if (any(MCP == "SNKM")) {
     nnn      <- 2:n
@@ -325,6 +314,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
   statistics.RV   <- NA
   statistics.RF   <- NA
   statistics.SKB  <- NA
+  statistics.tukey  <- NA
 
   #Initial groups:
   test.MGM  <- NA
@@ -337,6 +327,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
   test.RV   <- NA
   test.RF   <- NA
   test.SKB  <- NA
+  test.tukey <- NA
 
   #Defensive programming
   if (!any(parallel == c(TRUE,FALSE))) {
@@ -403,8 +394,6 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
     #if (console) cat(gettext("\nGroups: \n", domain = "R-MCP"))
     #if (console) print(test)
   }
-
-
 
   # Student-Newman-Keuls (SNK) Midrange Test (BATISTA, 2016)
   if (any(MCP == "SNKM")){
@@ -627,6 +616,34 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
     #if (console) print(test)
   }
 
+  # Tukey's test
+  if (any(MCP == "tukey")) {
+
+    # Statistics
+    statistics <- data.frame(Exp.Mean = Mean,
+                             CV      = CV,
+                             MSerror = mserror,
+                             DF      = dferror,
+                             n       = n
+    )
+
+    #if (console) cat(gettext("Statistics: \n", domain = "R-MCP"))
+    rownames(statistics) <- " "
+    colnames(statistics) <- c(gettext("Exp.Mean", domain = "R-MCP"),
+                              "CV",
+                              gettext("MSerror", domain = "R-MCP"),
+                              gettext("DF", domain = "R-MCP"),
+                              "n"
+    )
+    statistics.tukey <- statistics
+    #if (console) print(statistics)
+
+    test <- tukey(y, trt, dferror, mserror, alpha)
+    test.tukey <- test
+    #if (console) cat(gettext("\nGroups: \n", domain = "R-MCP"))
+    #if (console) print(test)
+  }
+
   #All statistics
   stat.tests <- list(Statistics.MGM  = statistics.MGM,
                      Statistics.MGR  = statistics.MGR,
@@ -637,7 +654,8 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
                      Statistics.CCR  = statistics.CCR,
                      Statistics.RV  = statistics.RV,
                      Statistics.RF  = statistics.RF,
-                     Statistics.SKB  = statistics.SKB
+                     Statistics.SKB  = statistics.SKB,
+                     Statistics.tukey = statistics.tukey
                      )
 
   #All groups
@@ -650,7 +668,8 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
                       group.CCR  = test.CCR,
                       group.RV  = test.RV,
                       group.RF  = test.RF,
-                      group.SKB  = test.SKB
+                      group.SKB  = test.SKB,
+                      group.tukey = test.tukey
                       )
   ################
   # Output results
