@@ -25,8 +25,10 @@ alpha <- 0.05
 
 #amostra <- SimulateData(5, 4, cenario = 2)
 # Usar a base de dados de /data/
-load("/media/ben10/Backup/BEN_R/pkgs_published_22.09.2026/MCPtests_22.09.2026/MCPtests/data/dic.rda")
+#load("/media/ben10/Backup/BEN_R/pkgs_published_22.09.2026/MCPtests_22.09.2026/MCPtests/data/dic.rda")
 #save(amostra, file = "./data/dic.rda")
+library(MCPtests)
+data("dic")
 y <- c(amostra$y)
 trt <- as.factor(amostra$trat)
 # MSerror
@@ -45,12 +47,13 @@ resultado <- MCPtest(y, trt, dferror, mserror, alpha, MCP = "tukey")
 # Precisamos padronizar esta funcao
 MCPtests:::plot.MCPtest(resultado)
 
+resultado <- MCPtests:::tukey(y, trt, dferror, mserror, alpha)
 snk(y, trt, replication, dferror, mserror, alpha)
 
 # Testando com o ExpDes
 ExpDes::tukey(y, trt, dferror, sserror, alpha = 0.05, group = TRUE,
   main = NULL)
-ExpDes::crd(trt, y, quali = TRUE, mcomp = "tukey", sigT = 0.05)
+ExpDes::crd(trt, y, quali = TRUE, mcomp = "snk", sigT = 0.05)
 
 # Multiple comparison procedure: MGR test
 MCPtest(aov(y ~trt), trt = "trt", alpha = 0.05,

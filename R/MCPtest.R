@@ -166,18 +166,18 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
   }
   #####################################################
   if (all(MCP == "all")){
-    MCP = c("MGM", "MGR", "SNKM", "TM", "SK", "CC", "CCR", "RV", "RF", "SKB", "tukey")  # FAZER ALTERACOES
+    MCP = c("MGM", "MGR", "SNK", "SNKM", "TM", "SK", "CC", "CCR", "RV", "RF", "SKB", "tukey")  # FAZER ALTERACOES
   }
   #####################################################
   #Defensive programming
   if (is.null(trt)) {
     stop("The trt argument is required", call. = FALSE)
   }
-  mcps <- c("MGM", "MGR", "SNKM", "TM", "SK", "CC", "CCR", "RV", "RF", "SKB", "tukey") # FAZER ALTERACOES
+  mcps <- c("MGM", "MGR", "SNK", "SNKM", "TM", "SK", "CC", "CCR", "RV", "RF", "SKB", "tukey") # FAZER ALTERACOES
   nas  <- pmatch(MCP, mcps)
   if (any(is.na(nas))) {
     stop("The options for the MCP argument are 'MGM', 'MGR', 'SNKM', 'TM',
-         'SK', 'CC', 'CCR', 'RV', 'RF' and 'SKB', 'tukey' ", call. = FALSE) # FAZER ALTERACOES
+         'SK', 'CC', 'CCR', 'RV', 'RF', 'SKB', 'SNK', 'tukey' ", call. = FALSE) # FAZER ALTERACOES
   }
   ################################################
   name.y   <- paste(deparse(substitute(y)))
@@ -315,6 +315,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
   statistics.RF   <- NA
   statistics.SKB  <- NA
   statistics.tukey  <- NA
+  statistics.SNK  <- NA
 
   #Initial groups:
   test.MGM  <- NA
@@ -328,6 +329,7 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
   test.RF   <- NA
   test.SKB  <- NA
   test.tukey <- NA
+  test.SNK <- NA
 
   #Defensive programming
   if (!any(parallel == c(TRUE,FALSE))) {
@@ -644,6 +646,34 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
     #if (console) print(test)
   }
 
+  # SNK test
+  if (any(MCP == "SNK")) {
+
+    # Statistics
+    statistics <- data.frame(Exp.Mean = Mean,
+                             CV      = CV,
+                             MSerror = mserror,
+                             DF      = dferror,
+                             n       = n
+    )
+
+    #if (console) cat(gettext("Statistics: \n", domain = "R-MCP"))
+    rownames(statistics) <- " "
+    colnames(statistics) <- c(gettext("Exp.Mean", domain = "R-MCP"),
+                              "CV",
+                              gettext("MSerror", domain = "R-MCP"),
+                              gettext("DF", domain = "R-MCP"),
+                              "n"
+    )
+    statistics.SNK <- statistics
+    #if (console) print(statistics)
+
+    test <- snk(y, trt, dferror, mserror, alpha)
+    test.SNK <- test
+    #if (console) cat(gettext("\nGroups: \n", domain = "R-MCP"))
+    #if (console) print(test)
+  }
+
   #All statistics
   stat.tests <- list(Statistics.MGM  = statistics.MGM,
                      Statistics.MGR  = statistics.MGR,
@@ -655,7 +685,8 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
                      Statistics.RV  = statistics.RV,
                      Statistics.RF  = statistics.RF,
                      Statistics.SKB  = statistics.SKB,
-                     Statistics.tukey = statistics.tukey
+                     Statistics.tukey = statistics.tukey,
+                     Statistics.SNK = statistics.SNK
                      )
 
   #All groups
@@ -669,7 +700,8 @@ MCPtest <- function(y, trt = NULL, dferror = NULL, mserror = NULL, replication =
                       group.RV  = test.RV,
                       group.RF  = test.RF,
                       group.SKB  = test.SKB,
-                      group.tukey = test.tukey
+                      group.tukey = test.tukey,
+                      group.SNK = test.SNK
                       )
   ################
   # Output results
